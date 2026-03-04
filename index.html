@@ -6,7 +6,7 @@
   <title>PulseGrowth | Host Cell</title>
 
   <!-- PWA / mobile -->
-  <meta name="theme-color" content="#000000" />
+  <meta name="theme-color" content="#f2f2f7" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="PulseGrowth" />
@@ -17,54 +17,95 @@
 
   <style>
     /* ==========================================
-       PulseGrowth | Brutalist Blue (Host Cell)
-       ========================================== */
+      PulseGrowth | iOS-like UI refresh
+      - Cleaner hierarchy (modules as tabs)
+      - Discreet warnings via "Details" + Info sheet
+      - iOS system palette (light + dark)
+    ========================================== */
+
     :root {
-      --bg-main: #000000;
-      --bg-card: #0d1015;
-      --bg-input: #161b23;
-      --bg-soft: #080b10;
+      --tint: #007aff; /* iOS system blue */
+      --tint-weak: rgba(0, 122, 255, 0.14);
 
-      --accent: #007bff;
-      --accent-2: #66b3ff;
-      --accent-glow: rgba(0, 123, 255, 0.16);
+      --bg: #f2f2f7; /* iOS grouped background */
+      --bg-elev: #ffffff;
+      --bg-field: rgba(120, 120, 128, 0.12); /* iOS secondary system fill */
 
-      --text-pri: #eef3ff;
-      --text-sec: #b7c2d6;
-      --text-dim: #8592ab;
+      --label: #1c1c1e;
+      --secondary: #6e6e73;
+      --tertiary: #8e8e93;
 
-      --border: #253041;
+      --separator: rgba(60, 60, 67, 0.29);
+      --nav-bg: rgba(242, 242, 247, 0.82);
+      --stroke-1: rgba(60, 60, 67, 0.29);
+      --stroke-2: rgba(60, 60, 67, 0.20);
+      --stroke-3: rgba(60, 60, 67, 0.14);
 
-      --ok: #66bb6a;
-      --ok-glow: rgba(102, 187, 106, 0.18);
-      --warn: #ffb300;
-      --warn-glow: rgba(255, 179, 0, 0.16);
-      --danger: #ef5350;
-      --danger-glow: rgba(239, 83, 80, 0.16);
+      --btn-bg: rgba(255, 255, 255, 0.78);
+      --btn-bg-ghost-hover: rgba(120, 120, 128, 0.12);
 
-      --radius: 12px;
-      --radius-sm: 8px;
-      --maxw: 1160px;
+      --danger-bg: rgba(255, 59, 48, 0.12);
+      --warn-bg: rgba(255, 159, 10, 0.12);
+      --ok-bg: rgba(52, 199, 89, 0.12);
+
+      --shadow: 0 8px 24px rgba(0,0,0,0.10);
+
+      --ok: #34c759;
+      --warn: #ff9f0a;
+      --danger: #ff3b30;
+
+      --radius: 16px;
+      --radius-sm: 12px;
+      --maxw: 900px;
+
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bot: env(safe-area-inset-bottom, 0px);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #000000;
+        --bg-elev: #1c1c1e;
+        --bg-field: rgba(120, 120, 128, 0.24);
+
+        --label: #ffffff;
+        --secondary: #a1a1a6;
+        --tertiary: #8e8e93;
+
+        --separator: rgba(84, 84, 88, 0.65);
+        --nav-bg: rgba(0, 0, 0, 0.78);
+        --stroke-1: rgba(84, 84, 88, 0.65);
+        --stroke-2: rgba(84, 84, 88, 0.48);
+        --stroke-3: rgba(84, 84, 88, 0.34);
+
+        --btn-bg: rgba(28, 28, 30, 0.72);
+        --btn-bg-ghost-hover: rgba(120, 120, 128, 0.24);
+
+        --danger-bg: rgba(255, 59, 48, 0.18);
+        --warn-bg: rgba(255, 159, 10, 0.18);
+        --ok-bg: rgba(52, 199, 89, 0.18);
+
+        --shadow: 0 10px 30px rgba(0,0,0,0.40);
+
+        --tint-weak: rgba(10, 132, 255, 0.18);
+      }
     }
 
     * { box-sizing: border-box; }
 
     html, body {
+      height: 100%;
       margin: 0;
       padding: 0;
-      min-height: 100%;
     }
 
-    /* (1) Global font: sans-serif for clarity (avoid uppercase-looking glyphs) */
     body {
-      background:
-        radial-gradient(circle at 8% 10%, rgba(0, 123, 255, 0.05), transparent 40%),
-        radial-gradient(circle at 90% 20%, rgba(0, 123, 255, 0.04), transparent 35%),
-        linear-gradient(180deg, #000000 0%, #04070b 100%);
-      color: var(--text-pri);
-      font-family: "Segoe UI", "Trebuchet MS", Arial, sans-serif;
-      line-height: 1.4;
-      padding: 16px;
+      background: var(--bg);
+      color: var(--label);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.35;
+      padding: calc(14px + var(--safe-top)) 14px calc(20px + var(--safe-bot));
     }
 
     .container {
@@ -72,755 +113,1097 @@
       margin: 0 auto;
     }
 
-    /* Numeric/telemetry: keep for numbers only */
     .mono {
-      font-family: "Roboto Mono", "Consolas", "Courier New", monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-variant-numeric: tabular-nums;
     }
 
-    /* Units: force a readable font and preserve case */
     .unit {
-      font-family: "Segoe UI", Arial, sans-serif;
-      text-transform: none !important;
       font-variant-ligatures: none;
       letter-spacing: 0;
+      text-transform: none;
+      color: var(--secondary);
+      font-weight: 600;
       font-size: 0.92em;
-      opacity: 0.98;
     }
 
     /* ==========================================
-       Header
-       ========================================== */
-    .header {
+      Top Nav
+    ========================================== */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 10px 0;
+      margin-bottom: 12px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--stroke-2);
+    }
+
+    .nav-row {
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-      padding-bottom: 14px;
-      margin-bottom: 20px;
-      border-bottom: 2px solid var(--border);
+      gap: 12px;
     }
 
     .brand {
       display: flex;
+      gap: 12px;
       align-items: center;
-      gap: 14px;
       min-width: 0;
     }
 
-    .brand-logo {
-      width: 58px;
-      height: 58px;
+    .app-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid var(--stroke-3);
+      box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+      background: var(--bg-elev);
       object-fit: contain;
-      border-radius: 10px;
-      border: 1px solid rgba(0, 123, 255, 0.24);
-      background: rgba(255,255,255,0.01);
-      box-shadow: 0 0 18px rgba(0, 123, 255, 0.14);
       flex-shrink: 0;
     }
 
-    .brand-title {
+    .brand-text { min-width: 0; }
+
+    .app-title {
       margin: 0;
-      font-size: 1.95rem;
+      font-size: 1.25rem;
       font-weight: 800;
-      line-height: 1;
-      letter-spacing: 0.01em;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
     }
 
-    .title-pulse { color: var(--accent); }
-    .title-growth { color: #eaf3ff; }
-
-    .brand-subtitle {
-      margin-top: 4px;
-      color: var(--text-sec);
-      font-size: 0.78rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+    .app-subtitle {
+      margin-top: 3px;
+      color: var(--secondary);
+      font-size: 0.82rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .top-controls {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 10px;
-      flex-shrink: 0;
-    }
-
-    .top-row {
+    .actions {
       display: flex;
       gap: 8px;
+      align-items: center;
       flex-wrap: wrap;
       justify-content: flex-end;
-      align-items: center;
-    }
-
-    .lang-switch {
-      font-weight: 700;
-      color: var(--text-sec);
-      user-select: none;
-      white-space: nowrap;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 6px 10px;
-      background: rgba(255,255,255,0.02);
-    }
-
-    .lang-switch button {
-      background: transparent;
-      border: 0;
-      color: inherit;
-      font: inherit;
-      cursor: pointer;
-      padding: 0 2px;
-      text-transform: uppercase;
-    }
-
-    .lang-switch button.active {
-      color: var(--accent);
-      text-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
     }
 
     .btn {
-      display: inline-block;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-      background: var(--bg-input);
-      color: var(--text-pri);
-      padding: 8px 12px;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 0.8rem;
+      border: 1px solid var(--stroke-2);
+      background: var(--btn-bg);
+      color: var(--label);
+      padding: 9px 12px;
+      border-radius: 12px;
       font-weight: 700;
-      text-transform: uppercase;
-      transition: 0.18s ease;
+      font-size: 0.86rem;
+      cursor: pointer;
+      transition: transform 0.10s ease, border-color 0.15s ease, background 0.15s ease;
       text-decoration: none;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      user-select: none;
       white-space: nowrap;
     }
 
-    .btn:hover {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
-    }
+    .btn:active { transform: scale(0.98); }
 
     .btn-primary {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: transparent;
+      border-color: rgba(0, 122, 255, 0.45);
+      background: var(--tint);
+      color: #fff;
     }
 
-    .btn-primary:hover {
-      background: var(--accent);
-      color: #000;
-    }
+    .btn-primary:hover { filter: brightness(0.98); }
 
     .btn-danger {
-      border-color: #5a2a2a;
-      color: #ffc9c9;
-      background: rgba(239, 83, 80, 0.05);
+      border-color: rgba(255, 59, 48, 0.45);
+      background: var(--danger-bg);
+      color: var(--danger);
     }
 
-    .btn-danger:hover {
-      border-color: var(--danger);
-      background: rgba(239, 83, 80, 0.16);
-      box-shadow: 0 0 0 3px var(--danger-glow);
+    .btn-ghost {
+      background: transparent;
+      border-color: transparent;
+      padding: 9px 10px;
     }
 
-    .btn-install {
-      border-color: var(--accent);
-      color: var(--accent);
-      animation: pulse-blue 2s infinite;
+    .btn-ghost:hover {
+      background: var(--btn-bg-ghost-hover);
+      border-color: var(--stroke-3);
     }
 
     .btn-install[hidden] { display: none !important; }
 
-    @keyframes pulse-blue {
-      0%   { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.35); }
-      70%  { box-shadow: 0 0 0 8px rgba(0, 123, 255, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
+    .icon {
+      width: 16px;
+      height: 16px;
+      display: inline-block;
     }
 
     /* ==========================================
-       Layout / Cards
-       ========================================== */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 16px;
+      Segmented controls
+    ========================================== */
+    .seg-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin: 12px 0 14px;
     }
 
-    .span-4 { grid-column: span 4; }
-    .span-12 { grid-column: span 12; }
+    .seg {
+      background: var(--bg-field);
+      border: 1px solid var(--stroke-2);
+      border-radius: 12px;
+      padding: 2px;
+      display: inline-flex;
+      gap: 2px;
+      align-items: stretch;
+    }
+
+    .seg button {
+      border: 0;
+      background: transparent;
+      color: var(--secondary);
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 0.86rem;
+      letter-spacing: -0.01em;
+      transition: background 0.12s ease, color 0.12s ease;
+      white-space: nowrap;
+    }
+
+    .seg button[aria-selected="true"] {
+      background: var(--bg-elev);
+      color: var(--label);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.10);
+    }
+
+    .seg-small button { padding: 7px 10px; font-size: 0.82rem; }
+
+    
+
+    /* ==========================================
+      Toggles (compact, iOS-like)
+    ========================================== */
+    .toggle-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: 2px 0 12px;
+    }
+
+    .toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--stroke-3);
+      background: var(--bg-field);
+      color: var(--secondary);
+      font-weight: 800;
+      font-size: 0.84rem;
+      user-select: none;
+    }
+
+    .toggle input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--tint);
+    }
+
+    .toggle input:checked + span {
+      color: var(--label);
+    }
+
+    /* input + unit select (Feed) */
+    .input-with-select {
+      display: grid;
+      grid-template-columns: 1fr 110px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .input-with-select select {
+      height: 42px;
+    }
+/* ==========================================
+      Module tiles (more obvious "3 blocks")
+    ========================================== */
+    .tiles {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .tile {
+      text-align: left;
+      border: 1px solid var(--stroke-2);
+      border-radius: var(--radius);
+      background: var(--bg-elev);
+      padding: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      cursor: pointer;
+      transition: transform 0.12s ease, border-color 0.12s ease;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .tile:active { transform: scale(0.99); }
+
+    .tile.active {
+      border-color: rgba(0, 122, 255, 0.55);
+      box-shadow: 0 0 0 4px var(--tint-weak);
+    }
+
+    .tile-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: var(--tint-weak);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--tint);
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .tile-title {
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      font-size: 0.96rem;
+      margin: 0;
+    }
+
+    .tile-sub {
+      margin: 2px 0 0;
+      color: var(--secondary);
+      font-size: 0.80rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (max-width: 720px) {
+      .tiles {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ==========================================
+      Panels + Cards
+    ========================================== */
+    .panel { display: none; }
+    .panel.active { display: block; }
 
     .card {
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0)),
-        var(--bg-card);
-      border: 1px solid var(--border);
+      background: var(--bg-elev);
+      border: 1px solid var(--stroke-2);
       border-radius: var(--radius);
+      box-shadow: var(--shadow);
       padding: 16px;
-      min-width: 0;
-      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+      overflow: hidden;
     }
 
     .card.invalid {
-      border-color: var(--danger);
-      box-shadow: 0 0 0 3px var(--danger-glow);
+      border-color: rgba(255, 59, 48, 0.62);
+      box-shadow: 0 0 0 4px rgba(255, 59, 48, 0.18);
     }
 
-    /* Section titles: keep monospaced telemetry look */
-    .card-title {
-      margin: 0 0 8px 0;
-      color: var(--accent);
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      border-left: 3px solid var(--accent);
-      padding-left: 10px;
-      font-family: "Courier New", Courier, monospace; /* keep */
+    .card-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
     }
 
-    .card-hint {
-      margin: 0 0 12px 0;
-      color: var(--text-dim);
-      font-size: 0.73rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      font-family: "Courier New", Courier, monospace; /* keep */
+    .card-h {
+      margin: 0;
+      font-size: 1.08rem;
+      font-weight: 900;
+      letter-spacing: -0.01em;
     }
 
-    /* ==========================================
-       Fields
-       ========================================== */
-    .field-group { margin-bottom: 12px; }
+    .card-desc {
+      margin: 6px 0 0;
+      color: var(--secondary);
+      font-weight: 600;
+      font-size: 0.90rem;
+    }
+
+    .card-right {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--bg-field);
+      border: 1px solid var(--stroke-3);
+      color: var(--secondary);
+      font-weight: 800;
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+
+    .pill.ok { color: var(--ok); border-color: rgba(52, 199, 89, 0.45); background: var(--ok-bg); }
+    .pill.warn { color: var(--warn); border-color: rgba(255, 159, 10, 0.45); background: var(--warn-bg); }
+
+    .form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .field-group { display: grid; gap: 6px; }
 
     label {
-      display: block;
-      margin-bottom: 5px;
-      font-size: 0.72rem;
-      color: var(--text-sec);
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      text-transform: none; /* avoid g/L->G/L confusion */
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--label);
+      letter-spacing: -0.01em;
+    }
+
+    .hint {
+      color: var(--secondary);
+      font-weight: 600;
+      font-size: 0.82rem;
+      margin-top: -2px;
     }
 
     input, select {
       width: 100%;
-      background: var(--bg-input);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      color: var(--text-pri);
-      padding: 10px 11px;
+      background: var(--bg-field);
+      border: 1px solid var(--stroke-2);
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--label);
       outline: none;
-      font-family: inherit; /* sans */
-      font-size: 0.95rem;
-      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+      transition: box-shadow 0.15s ease, border-color 0.15s ease;
     }
+
+    input::placeholder { color: var(--tertiary); font-weight: 700; }
 
     input:focus, select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
+      border-color: rgba(0, 122, 255, 0.70);
+      box-shadow: 0 0 0 4px var(--tint-weak);
     }
 
-    input::placeholder { color: #7f8ba0; }
-
-    .row-2 {
+    .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
 
-    .row-3 {
+    .grid-3 {
       display: grid;
-      grid-template-columns: 1fr 1fr auto;
-      gap: 8px;
+      grid-template-columns: 1fr 1fr 110px;
+      gap: 10px;
       align-items: end;
     }
 
-    .inline-grid {
+    @media (max-width: 560px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .grid-3 { grid-template-columns: 1fr; }
+    }
+
+    .actions-row {
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 8px;
-      align-items: end;
+      gap: 10px;
+      align-items: center;
+      margin-top: 6px;
     }
 
-    .unit-select {
-      min-width: 88px;
-      font-family: "Segoe UI", Arial, sans-serif;
-      text-transform: none !important;
-    }
-
-    .btn-action {
+    .btn-block {
       width: 100%;
-      margin-top: 4px;
+      justify-content: center;
       padding: 12px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--accent);
-      background: transparent;
-      color: var(--accent);
-      cursor: pointer;
-      font-family: inherit;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      transition: 0.18s ease;
-    }
-
-    .btn-action:hover {
-      background: var(--accent);
-      color: #000;
-      box-shadow: 0 0 0 3px var(--accent-glow);
+      font-size: 0.95rem;
+      border-radius: 14px;
     }
 
     .btn-secondary {
-      border-color: var(--border);
-      color: var(--text-sec);
-    }
-
-    .btn-secondary:hover {
-      border-color: var(--accent);
-      background: rgba(0, 123, 255, 0.08);
-      color: var(--text-pri);
-      box-shadow: 0 0 0 3px var(--accent-glow);
-    }
-
-    .btn-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 2px;
+      background: var(--tint-weak);
+      border-color: rgba(0, 122, 255, 0.35);
+      color: var(--tint);
     }
 
     /* ==========================================
-       Results
-       ========================================== */
-    .result-box {
-      margin-top: 12px;
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px dashed var(--accent);
-      background: var(--accent-glow);
+      Results (iOS table-like)
+    ========================================== */
+    .result {
+      margin-top: 14px;
+      border-radius: var(--radius);
+      border: 1px solid var(--stroke-2);
+      background: var(--bg-elev);
+      overflow: hidden;
       display: none;
     }
 
-    .result-box.visible { display: block; }
-    .result-box.error {
-      border-color: var(--danger);
-      background: var(--danger-glow);
-    }
-    .result-box.warn {
-      border-color: var(--warn);
-      background: var(--warn-glow);
+    .result.visible { display: block; }
+
+    .result.error {
+      border-color: rgba(255, 59, 48, 0.62);
+      box-shadow: 0 0 0 4px rgba(255, 59, 48, 0.18);
     }
 
-    .result-line {
+    .result.warn {
+      border-color: rgba(255, 159, 10, 0.62);
+      box-shadow: 0 0 0 4px rgba(255, 159, 10, 0.16);
+    }
+
+    .result-head {
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid var(--stroke-3);
+      background: var(--bg-field);
+    }
+
+    .result-title {
+      margin: 0;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      font-size: 0.92rem;
+      color: var(--label);
+    }
+
+    .result-list { padding: 0; margin: 0; list-style: none; }
+
+    .row {
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 12px;
       align-items: center;
-      padding: 5px 0;
-      border-bottom: 1px dashed rgba(255,255,255,0.06);
-    }
-    .result-line:last-child { border-bottom: none; }
-
-    .result-label {
-      color: var(--text-sec);
-      font-size: 0.78rem;
-      text-transform: none;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--stroke-3);
     }
 
-    .result-value {
-      color: var(--accent);
+    .row:last-child { border-bottom: none; }
+
+    .k {
+      color: var(--secondary);
       font-weight: 800;
+      font-size: 0.86rem;
+    }
+
+    .v {
+      color: var(--label);
+      font-weight: 900;
       font-size: 1.02rem;
       text-align: right;
       word-break: break-word;
     }
 
-    .result-meta {
-      margin-top: 8px;
-      color: var(--text-sec);
-      font-size: 0.78rem;
-      line-height: 1.45;
-      text-transform: none;
+    @media (max-width: 560px) {
+      .row { grid-template-columns: 1fr; }
+      .v { text-align: left; }
     }
 
-    .small-tag {
-      display: inline-block;
-      padding: 2px 8px;
+    details {
+      padding: 10px 14px 14px;
+      border-top: 1px solid var(--stroke-3);
+      background: var(--bg-elev);
+    }
+
+    details > summary {
+      cursor: pointer;
+      color: var(--tint);
+      font-weight: 900;
+      list-style: none;
+      outline: none;
+    }
+
+    details > summary::-webkit-details-marker { display: none; }
+
+    .meta {
+      margin-top: 10px;
+      color: var(--secondary);
+      font-weight: 600;
+      font-size: 0.86rem;
+      line-height: 1.35;
+    }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
       border-radius: 999px;
-      border: 1px solid var(--border);
-      font-size: 0.68rem;
-      color: var(--text-sec);
-      margin-right: 6px;
-      margin-top: 4px;
-      text-transform: none;
+      border: 1px solid var(--stroke-3);
+      background: var(--bg-field);
+      color: var(--secondary);
+      font-weight: 800;
+      font-size: 0.78rem;
+      white-space: nowrap;
     }
 
-    .small-tag.ok {
-      border-color: rgba(102, 187, 106, 0.35);
-      color: #b6f1b9;
-      background: rgba(102, 187, 106, 0.08);
-    }
-
-    .small-tag.warn {
-      border-color: rgba(255, 179, 0, 0.35);
-      color: #ffe39d;
-      background: rgba(255, 179, 0, 0.08);
-    }
+    .tag.ok { color: var(--ok); border-color: rgba(52, 199, 89, 0.45); background: var(--ok-bg); }
+    .tag.warn { color: var(--warn); border-color: rgba(255, 159, 10, 0.45); background: var(--warn-bg); }
 
     /* ==========================================
-       Foundation / notes
-       ========================================== */
-    .info-grid {
-      margin-top: 18px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      Bottom sheet (Info)
+    ========================================== */
+    .sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 80;
+      padding: 12px;
     }
 
-    .info-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 15px;
+    .sheet-backdrop.open { display: flex; }
+
+    .sheet {
+      width: min(720px, 100%);
+      max-height: 80vh;
+      background: var(--bg-elev);
+      border-radius: 18px;
+      border: 1px solid var(--stroke-2);
+      box-shadow: 0 18px 48px rgba(0,0,0,0.35);
+      overflow: hidden;
+      transform: translateY(12px);
     }
 
-    .info-title {
-      margin: 0 0 8px 0;
-      color: var(--accent);
-      font-size: 0.86rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      font-family: "Courier New", Courier, monospace; /* keep */
+    .sheet-header {
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--stroke-3);
+      background: var(--bg-field);
     }
 
-    .info-text {
-      color: var(--text-sec);
-      font-size: 0.82rem;
-      line-height: 1.5;
-      text-transform: none;
+    .sheet-title {
+      margin: 0;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      font-size: 1.02rem;
     }
 
-    .eq-block {
-      margin: 8px 0 10px 0;
+    .sheet-body {
+      padding: 14px;
+      overflow: auto;
+    }
+
+    .section {
+      border: 1px solid var(--stroke-3);
+      border-radius: 14px;
+      background: var(--bg-elev);
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .section h4 {
+      margin: 0 0 6px 0;
+      font-size: 0.95rem;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+    }
+
+    .section p {
+      margin: 0;
+      color: var(--secondary);
+      font-weight: 600;
+      line-height: 1.45;
+      font-size: 0.90rem;
+    }
+
+    .formula {
+      margin-top: 10px;
       padding: 10px 12px;
-      border-radius: 8px;
-      border: 1px solid rgba(0, 123, 255, 0.18);
-      background: rgba(0, 123, 255, 0.06);
-      color: var(--text-pri);
+      border-radius: 12px;
+      border: 1px solid rgba(0, 122, 255, 0.30);
+      background: rgba(0, 122, 255, 0.10);
+      font-weight: 900;
       text-align: center;
-      font-weight: 800;
+      color: var(--label);
     }
 
     footer {
       margin-top: 16px;
-      padding-top: 12px;
-      border-top: 1px solid var(--border);
-      color: var(--text-sec);
-      font-size: 0.8rem;
-      text-transform: none;
-    }
-    footer strong { color: var(--text-pri); }
-
-    /* ==========================================
-       Responsive
-       ========================================== */
-    @media (max-width: 980px) {
-      .span-4 { grid-column: span 6; }
+      color: var(--secondary);
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-align: center;
     }
 
-    @media (max-width: 768px) {
-      body { padding: 12px; }
+    footer strong { color: var(--label); }
 
-      .header { flex-direction: column; align-items: stretch; }
-      .top-controls { align-items: stretch; }
-      .top-row { justify-content: flex-start; }
-
-      .brand-logo { width: 50px; height: 50px; }
-      .brand-title { font-size: 1.65rem; }
-
-      .span-4 { grid-column: span 12; }
-      .row-2 { grid-template-columns: 1fr; }
-      .btn-row { grid-template-columns: 1fr; }
-      .row-3 { grid-template-columns: 1fr; }
-
-      .result-line { grid-template-columns: 1fr; gap: 2px; }
-      .result-value { text-align: left; }
-
-      .info-grid { grid-template-columns: 1fr; }
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+      .sheet { transform: none !important; }
     }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <!-- HEADER -->
-    <header class="header">
-      <div class="brand">
-        <img src="./icon-192.png" alt="PulseGrowth logo" class="brand-logo" />
-        <div>
-          <h1 class="brand-title">
-            <span class="title-pulse">Pulse</span><span class="title-growth">Growth</span>
-          </h1>
-          <div class="brand-subtitle" data-i18n="subtitle">Host Cell Lab Suite · Kinetic Precision</div>
-        </div>
-      </div>
-
-      <div class="top-controls">
-        <div class="top-row">
-          <!-- (2) Language toggle -->
-          <div class="lang-switch" aria-label="Language selector">
-            <button id="lang-es" class="active" type="button">ES</button>
-            <span aria-hidden="true"> | </span>
-            <button id="lang-en" type="button">EN</button>
+    <!-- NAV -->
+    <header class="nav" aria-label="PulseGrowth navigation">
+      <div class="nav-row">
+        <div class="brand">
+          <img src="./icon-192.png" alt="PulseGrowth" class="app-icon" />
+          <div class="brand-text">
+            <h1 class="app-title">PulseGrowth</h1>
+            <div class="app-subtitle" data-i18n="subtitle">Host Cell Lab Suite · Practical tools for high-performance biotechnology.</div>
           </div>
+        </div>
 
-          <a class="btn btn-primary"
-             href="https://github.com/ebalderasr/PulseGrowth"
-             target="_blank" rel="noopener noreferrer"
-             data-i18n="btnDocs">
-            [ Documentación / Repo ]
+        <div class="actions">
+          <button class="btn btn-ghost" id="btn-info" type="button" data-i18n="btnInfo" aria-label="Info">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 10v7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M12 7h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+            <span>Info</span>
+          </button>
+
+          <a class="btn" href="https://github.com/ebalderasr/PulseGrowth" target="_blank" rel="noopener noreferrer" data-i18n="btnDocs">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M14 3v5h5" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+            <span>[ Repo ]</span>
           </a>
 
-          <!-- (6) Clear fixed -->
-          <button class="btn btn-danger" id="btn-clear-all" type="button" data-i18n="btnClear">
-            [ Limpiar todo ]
+          
+          <div class="seg seg-small" aria-label="Language selector">
+            <button id="lang-es" class="active" type="button" aria-selected="true">ES</button>
+            <button id="lang-en" type="button" aria-selected="false">EN</button>
+          </div>
+<button class="btn btn-danger" id="btn-clear-all" type="button" data-i18n="btnClear">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M8 6V4h8v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M7 6l1 15h8l1-15" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+            <span>[ Limpiar ]</span>
           </button>
 
-          <button class="btn btn-install" id="install-btn" type="button" hidden data-i18n="btnInstall">
-            [ Instalar App ]
+          <button class="btn btn-primary btn-install" id="install-btn" type="button" hidden data-i18n="btnInstall">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 3v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M8 11l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M4 20h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span>[ Instalar ]</span>
           </button>
         </div>
-
-        <!-- (3) TIP removed -->
       </div>
     </header>
 
-    <!-- MAIN GRID -->
-    <main class="grid">
-      <!-- 01 Kinetics -->
-      <section class="card span-4" id="card-kinetics">
-        <h2 class="card-title" data-i18n="k_title">01. Bio-Kinetics</h2>
-        <p class="card-hint" data-i18n="k_hint">Growth metrics (μ, doubling time, expansion factor, IVCD)</p>
+    <!-- Controls -->
 
-        <div class="field-group">
-          <label for="dt-hours" data-i18n="k_dt">Δt <span class="unit">(elapsed time)</span></label>
-          <div class="inline-grid">
-            <!-- (5) placeholders instead of real values -->
-            <input type="number" id="dt-hours" step="any" min="0" placeholder="96" data-i18n-placeholder="ph_dt" />
-            <select id="dt-unit" class="unit-select">
-              <option value="h" selected>h</option>
-              <option value="d">day</option>
-            </select>
-          </div>
+    <!-- Module tiles (explicit "3 blocks") -->
+    <div class="tiles" aria-label="Modules overview">
+      <button class="tile active" type="button" data-go="kin" aria-label="Bio-Kinetics">
+        <div class="tile-badge mono">01</div>
+        <div style="min-width:0;">
+          <p class="tile-title" data-i18n="tile_kin">Bio-Kinetics</p>
+          <p class="tile-sub" data-i18n="tile_kin_sub">μ · doubling · IVCD</p>
         </div>
+      </button>
 
-        <div class="field-group">
-          <label data-i18n="k_x">Cell densities <span class="unit">(×10⁶ cell/mL)</span></label>
-          <div class="row-2">
+      <button class="tile" type="button" data-go="met" aria-label="Metabolics">
+        <div class="tile-badge mono">02</div>
+        <div style="min-width:0;">
+          <p class="tile-title" data-i18n="tile_met">Metabolics (q)</p>
+          <p class="tile-sub" data-i18n="tile_met_sub">qGlc · qGln</p>
+        </div>
+      </button>
+
+      <button class="tile" type="button" data-go="feed" aria-label="Feed Control">
+        <div class="tile-badge mono">03</div>
+        <div style="min-width:0;">
+          <p class="tile-title" data-i18n="tile_feed">Feed Control</p>
+          <p class="tile-sub" data-i18n="tile_feed_sub">simple correction plan</p>
+        </div>
+      </button>
+    </div>
+
+    <main>
+      <!-- PANEL: Kinetics -->
+      <section class="panel active" id="panel-kin" role="region" aria-label="Bio-Kinetics">
+        <div class="card" id="card-kinetics">
+          <div class="card-header">
             <div>
-              <label for="x0" class="unit" data-i18n="k_x0">X0 (initial)</label>
-              <input type="number" id="x0" step="any" min="0" placeholder="0.2" data-i18n-placeholder="ph_x0" />
+              <h2 class="card-h" data-i18n="k_title">01. Bio-Kinetics</h2>
+              <p class="card-desc" data-i18n="k_hint">Growth metrics (μ, doubling time, expansion factor, IVCD)</p>
             </div>
+            <div class="card-right">
+              <span class="pill mono">μ</span>
+            </div>
+          </div>
+
+          <div class="form">
+            <div class="field-group">
+              <label for="dt-hours" data-i18n="k_dt">Δt <span class="unit">(elapsed time)</span></label>
+              <div class="grid-2" style="grid-template-columns: 1fr 140px;">
+                <input type="number" id="dt-hours" step="any" min="0" placeholder="96" data-i18n-placeholder="ph_dt" />
+                <select id="dt-unit">
+                  <option value="h" selected>h</option>
+                  <option value="d">day</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label data-i18n="k_x">Cell densities <span class="unit">(×10⁶ cell/mL)</span></label>
+              <div class="grid-2">
+                <div class="field-group">
+                  <label for="x0" class="unit" data-i18n="k_x0">X0 (initial)</label>
+                  <input type="number" id="x0" step="any" min="0" placeholder="0.2" data-i18n-placeholder="ph_x0" />
+                </div>
+                <div class="field-group">
+                  <label for="x1" class="unit" data-i18n="k_x1">X1 (final)</label>
+                  <input type="number" id="x1" step="any" min="0" placeholder="3.0" data-i18n-placeholder="ph_x1" />
+                </div>
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-block" id="btn-kinetics" type="button" data-i18n="k_btn">Analyze kinetics</button>
+
+            <div class="result" id="res-kin" aria-live="polite">
+              <div class="result-head">
+                <p class="result-title" data-i18n="res_title">Results</p>
+                <span class="pill" id="kin-status-pill" hidden>—</span>
+              </div>
+              <ul class="result-list">
+                <li class="row">
+                  <div class="k" data-i18n="k_mu">μ (specific growth rate)</div>
+                  <div class="v mono" id="out-mu">---</div>
+                </li>
+                <li class="row">
+                  <div class="k" data-i18n="k_td">Doubling time (t<sub>d</sub>)</div>
+                  <div class="v mono" id="out-td">---</div>
+                </li>
+                <li class="row">
+                  <div class="k" data-i18n="k_exp">Expansion factor (X1 / X0)</div>
+                  <div class="v mono" id="out-exp">---</div>
+                </li>
+                <li class="row">
+                  <div class="k" data-i18n="k_ivcd">IVCD <span class="unit">(10⁶ cell·h/mL)</span></div>
+                  <div class="v mono" id="out-ivcd">---</div>
+                </li>
+              </ul>
+
+              <details>
+                <summary data-i18n="details">Details & assumptions</summary>
+                <div class="meta" id="kin-meta"></div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL: Metabolics -->
+      <section class="panel" id="panel-met" role="region" aria-label="Metabolics">
+        <div class="card" id="card-metabolics">
+          <div class="card-header">
             <div>
-              <label for="x1" class="unit" data-i18n="k_x1">X1 (final)</label>
-              <input type="number" id="x1" step="any" min="0" placeholder="3.0" data-i18n-placeholder="ph_x1" />
+              <h2 class="card-h" data-i18n="m_title">02. Metabolics (q)</h2>
+              <p class="card-desc" data-i18n="m_hint">qGlc / qGln normalized by IVCD · consistent output</p>
+            </div>
+            <div class="card-right">
+              <span class="pill mono">q</span>
             </div>
           </div>
-        </div>
 
-        <button class="btn-action" id="btn-kinetics" type="button" data-i18n="k_btn">
-          Analyze kinetics
-        </button>
+          <div class="form">
 
-        <div class="result-box" id="res-kin">
-          <div class="result-line">
-            <div class="result-label" data-i18n="k_mu">μ (specific growth rate)</div>
-            <div class="result-value mono" id="out-mu">---</div>
+            <div class="toggle-row" aria-label="Metabolics selection">
+              <label class="toggle">
+                <input type="checkbox" id="do-qglc" checked />
+                <span data-i18n="m_calc_glc">Compute Glc</span>
+              </label>
+              <label class="toggle">
+                <input type="checkbox" id="do-qgln" checked />
+                <span data-i18n="m_calc_gln">Compute Gln</span>
+              </label>
+            </div>
+<div class="field-group">
+              <label data-i18n="m_glc">Glucose, Glc <span class="unit">(C0 → C1)</span></label>
+              <div class="grid-3">
+                <input type="number" id="glc0" step="any" placeholder="C0" data-i18n-placeholder="ph_c0" />
+                <input type="number" id="glc1m" step="any" placeholder="C1" data-i18n-placeholder="ph_c1" />
+                <select id="u-glc">
+                  <option value="gl" selected>g/L</option>
+                  <option value="mm">mM</option>
+                </select>
+              </div>
+              <div class="hint" data-i18n="m_hint2">Tip: you can compute q for Glc, Gln, or both.</div>
+            </div>
+
+            <div class="field-group">
+              <label data-i18n="m_gln">Glutamine, Gln <span class="unit">(C0 → C1)</span></label>
+              <div class="grid-3">
+                <input type="number" id="gln0" step="any" placeholder="C0" data-i18n-placeholder="ph_c0" />
+                <input type="number" id="gln1m" step="any" placeholder="C1" data-i18n-placeholder="ph_c1" />
+                <select id="u-gln">
+                  <option value="gl">g/L</option>
+                  <option value="mm" selected>mM</option>
+                </select>
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-block" id="btn-metabolics" type="button" data-i18n="m_btn">Calculate q</button>
+
+            <div class="result" id="res-met" aria-live="polite">
+              <div class="result-head">
+                <p class="result-title" data-i18n="res_title">Results</p>
+                <span class="pill mono" id="met-status-pill" hidden>—</span>
+              </div>
+              <ul class="result-list">
+                <li class="row">
+                  <div class="k">qGlc <span class="unit">(pmol/cell/day)</span></div>
+                  <div class="v mono" id="out-qglc">---</div>
+                </li>
+                <li class="row">
+                  <div class="k">qGlc <span class="unit">(pg/cell/day)</span></div>
+                  <div class="v mono" id="out-qglc-pg">---</div>
+                </li>
+                <li class="row">
+                  <div class="k">qGln <span class="unit">(pmol/cell/day)</span></div>
+                  <div class="v mono" id="out-qgln">---</div>
+                </li>
+                <li class="row">
+                  <div class="k">qGln <span class="unit">(pg/cell/day)</span></div>
+                  <div class="v mono" id="out-qgln-pg">---</div>
+                </li>
+              </ul>
+
+              <details>
+                <summary data-i18n="details">Details & assumptions</summary>
+                <div class="meta" id="met-meta"></div>
+              </details>
+            </div>
           </div>
-          <div class="result-line">
-            <div class="result-label" data-i18n="k_td">Doubling time (t<sub>d</sub>)</div>
-            <div class="result-value mono" id="out-td">---</div>
-          </div>
-          <div class="result-line">
-            <div class="result-label" data-i18n="k_exp">Expansion factor (X1 / X0)</div>
-            <div class="result-value mono" id="out-exp">---</div>
-          </div>
-          <div class="result-line">
-            <div class="result-label" data-i18n="k_ivcd">IVCD <span class="unit">(10⁶ cell·h/mL)</span></div>
-            <div class="result-value mono" id="out-ivcd">---</div>
-          </div>
-          <div class="result-meta" id="kin-meta"></div>
         </div>
       </section>
 
-      <!-- 02 Metabolics -->
-      <section class="card span-4" id="card-metabolics">
-        <h2 class="card-title" data-i18n="m_title">02. Metabolics (q)</h2>
-        <p class="card-hint" data-i18n="m_hint">qGlc / qGln normalized by IVCD · consistent output</p>
+      <!-- PANEL: Feed -->
+      <section class="panel" id="panel-feed" role="region" aria-label="Feed Control">
+        <div class="card" id="card-feed">
+          <div class="card-header">
+            <div>
+              <h2 class="card-h" data-i18n="f_title">03. Feed Control</h2>
+              <p class="card-desc" data-i18n="f_hint">Simple correction plan to reach target Glc / Gln</p>
+            </div>
+            <div class="card-right">
+              <button class="btn btn-secondary" id="btn-feed-sync" type="button" data-i18n="f_sync">Use C1 from Metabolics</button>
+            </div>
+          </div>
 
-        <div class="field-group">
-          <label data-i18n="m_glc">Glucose, Glc <span class="unit">(C0 → C1)</span></label>
-          <div class="row-3">
-            <input type="number" id="glc0" step="any" placeholder="C0" data-i18n-placeholder="ph_c0" />
-            <input type="number" id="glc1m" step="any" placeholder="C1" data-i18n-placeholder="ph_c1" />
-            <select id="u-glc" class="unit-select">
-              <option value="gl" selected>g/L</option>
-              <option value="mm">mM</option>
-            </select>
-          </div>
-        </div>
+          <div class="form">
 
-        <div class="field-group">
-          <label data-i18n="m_gln">Glutamine, Gln <span class="unit">(C0 → C1)</span></label>
-          <div class="row-3">
-            <input type="number" id="gln0" step="any" placeholder="C0" data-i18n-placeholder="ph_c0" />
-            <input type="number" id="gln1m" step="any" placeholder="C1" data-i18n-placeholder="ph_c1" />
-            <select id="u-gln" class="unit-select">
-              <option value="gl">g/L</option>
-              <option value="mm" selected>mM</option>
-            </select>
-          </div>
-        </div>
-
-        <button class="btn-action" id="btn-metabolics" type="button" data-i18n="m_btn">
-          Calculate q
-        </button>
-
-        <div class="result-box" id="res-met">
-          <div class="result-line">
-            <div class="result-label">qGlc <span class="unit">(pmol/cell/day)</span></div>
-            <div class="result-value mono" id="out-qglc">---</div>
-          </div>
-          <div class="result-line">
-            <div class="result-label">qGlc <span class="unit">(pg/cell/day)</span></div>
-            <div class="result-value mono" id="out-qglc-pg">---</div>
-          </div>
-          <div class="result-line">
-            <div class="result-label">qGln <span class="unit">(pmol/cell/day)</span></div>
-            <div class="result-value mono" id="out-qgln">---</div>
-          </div>
-          <div class="result-line">
-            <div class="result-label">qGln <span class="unit">(pg/cell/day)</span></div>
-            <div class="result-value mono" id="out-qgln-pg">---</div>
-          </div>
-          <div class="result-meta" id="met-meta"></div>
-        </div>
-      </section>
-
-      <!-- 03 Feed -->
-      <section class="card span-4" id="card-feed">
-        <h2 class="card-title" data-i18n="f_title">03. Feed Control</h2>
-        <p class="card-hint" data-i18n="f_hint">Simple correction plan to reach target Glc / Gln</p>
-
-        <div class="row-2">
-          <div class="field-group">
-            <label for="s-glc" data-i18n="f_sglc">Glc stock <span class="unit">(g/L)</span></label>
-            <input type="number" id="s-glc" step="any" min="0" value="200" />
-          </div>
-          <div class="field-group">
-            <label for="s-gln" data-i18n="f_sgln">Gln stock <span class="unit">(mM)</span></label>
-            <input type="number" id="s-gln" step="any" min="0" value="200" />
-          </div>
-        </div>
-
-        <div class="row-2">
-          <div class="field-group">
-            <label for="v-cult" data-i18n="f_v">Culture volume <span class="unit">(mL)</span></label>
-            <input type="number" id="v-cult" step="any" min="0" value="30" />
-          </div>
-          <div class="field-group">
-            <label for="t-glc" data-i18n="f_tglc">Target Glc <span class="unit">(g/L)</span></label>
-            <input type="number" id="t-glc" step="any" min="0" value="5" />
-          </div>
-        </div>
-
-        <div class="row-2">
-          <div class="field-group">
-            <label for="t-gln" data-i18n="f_tgln">Target Gln <span class="unit">(mM)</span></label>
-            <input type="number" id="t-gln" step="any" min="0" value="4" />
-          </div>
-          <div class="field-group">
-            <label for="feed-safety" data-i18n="f_mode">Mode</label>
-            <select id="feed-safety" class="unit-select">
-              <option value="exact" data-i18n="f_exact">Exact</option>
-              <option value="floor" data-i18n="f_floor">Non-negative</option>
-            </select>
-          </div>
-        </div>
-
-        <button class="btn-action" id="btn-feed" type="button" data-i18n="f_btn">
-          Calculate feed plan
-        </button>
-
-        <div class="result-box" id="res-feed">
-          <div class="result-line">
-            <div class="result-label" data-i18n="f_out_glc">Glucose feed <span class="unit">(mL)</span></div>
-            <div class="result-value mono" id="out-fglc">---</div>
-          </div>
-          <div class="result-line">
-            <div class="result-label" data-i18n="f_out_gln">Glutamine feed <span class="unit">(mL)</span></div>
-            <div class="result-value mono" id="out-fgln">---</div>
-          </div>
-          <div class="result-meta" id="feed-meta"></div>
-        </div>
-      </section>
-
-      <!-- Foundation -->
-      <section class="span-12">
-        <div class="info-grid">
-          <article class="info-card">
-            <h3 class="info-title" data-i18n="sci_title">Scientific fundamentals</h3>
-            <div class="info-text" data-i18n="sci_p1">
-              PulseGrowth uses an exponential growth model between two sampling points to estimate μ and doubling time.
+            <div class="toggle-row" aria-label="Feed selection">
+              <label class="toggle">
+                <input type="checkbox" id="do-feed-glc" checked />
+                <span data-i18n="f_calc_glc">Compute Glc</span>
+              </label>
+              <label class="toggle">
+                <input type="checkbox" id="do-feed-gln" checked />
+                <span data-i18n="f_calc_gln">Compute Gln</span>
+              </label>
+            </div>
+<div class="field-group">
+              <label data-i18n="f_curr">Current concentrations</label>
+              <div class="grid-2">
+                <div class="field-group">
+                  <label for="cur-glc" data-i18n="f_curr_glc">Current Glc <span class="unit">(g/L)</span></label>
+                  <input type="number" id="cur-glc" step="any" min="0" placeholder="e.g. 2.5" data-i18n-placeholder="ph_cur_glc" />
+                </div>
+                <div class="field-group">
+                  <label for="cur-gln" data-i18n="f_curr_gln">Current Gln <span class="unit">(mM)</span></label>
+                  <input type="number" id="cur-gln" step="any" min="0" placeholder="e.g. 1.8" data-i18n-placeholder="ph_cur_gln" />
+                </div>
+              </div>
+              <div class="hint" data-i18n="f_curr_hint">You can enter current values directly, or pull them from C1 above.</div>
             </div>
 
-            <div class="eq-block mono">X = X₀ · e^(μ · t)</div>
-            <div class="eq-block mono">μ = ln(X₁ / X₀) / Δt</div>
-            <div class="eq-block mono">t<sub>d</sub> = ln(2) / μ</div>
-
-            <div class="info-text" data-i18n="sci_p2">
-              For metabolite-specific rates, IVCD is estimated assuming exponential behavior within the interval.
+            <div class="field-group">
+              <label data-i18n="f_stocks">Stock solutions</label>
+              <div class="grid-2">
+                <div class="field-group">
+  <label for="s-glc" data-i18n="f_sglc">Glc stock</label>
+  <div class="input-with-select">
+    <input type="number" id="s-glc" step="any" min="0" placeholder="200" data-i18n-placeholder="ph_stock_glc" />
+    <select id="u-s-glc" aria-label="Glc stock unit">
+      <option value="gL" selected>g/L</option>
+      <option value="gml">g/mL</option>
+      <option value="mgml">mg/mL</option>
+      <option value="pct">% w/v</option>
+      <option value="mM">mM</option>
+      <option value="M">M</option>
+    </select>
+  </div>
+</div>
+                <div class="field-group">
+  <label for="s-gln" data-i18n="f_sgln">Gln stock</label>
+  <div class="input-with-select">
+    <input type="number" id="s-gln" step="any" min="0" placeholder="200" data-i18n-placeholder="ph_stock_gln" />
+    <select id="u-s-gln" aria-label="Gln stock unit">
+      <option value="mM" selected>mM</option>
+      <option value="M">M</option>
+      <option value="gL">g/L</option>
+      <option value="gml">g/mL</option>
+      <option value="mgml">mg/mL</option>
+      <option value="pct">% w/v</option>
+    </select>
+  </div>
+</div>
+              </div>
             </div>
 
-            <div class="eq-block mono">IVCD = ((X₁ − X₀) / ln(X₁ / X₀)) · Δt</div>
-          </article>
+            <div class="field-group">
+              <label data-i18n="f_targets">Culture + targets</label>
+              <div class="grid-2">
+                <div class="field-group">
+                  <label for="v-cult" data-i18n="f_v">Culture volume <span class="unit">(mL)</span></label>
+                  <input type="number" id="v-cult" step="any" min="0" placeholder="30" data-i18n-placeholder="ph_v" />
+                </div>
+                <div class="field-group">
+                  <label for="t-glc" data-i18n="f_tglc">Target Glc <span class="unit">(g/L)</span></label>
+                  <input type="number" id="t-glc" step="any" min="0" placeholder="5" data-i18n-placeholder="ph_tglc" />
+                </div>
+              </div>
 
-          <article class="info-card">
-            <h3 class="info-title" data-i18n="q_title">qGlc / qGln logic (unit-consistent)</h3>
-            <div class="info-text" data-i18n="q_p1">
-              To keep q comparable across inputs, the app converts g/L to mM using MW and reports q in pmol/cell/day.
+              <div class="grid-2">
+                <div class="field-group">
+                  <label for="t-gln" data-i18n="f_tgln">Target Gln <span class="unit">(mM)</span></label>
+                  <input type="number" id="t-gln" step="any" min="0" placeholder="4" data-i18n-placeholder="ph_tgln" />
+                </div>
+                <div class="field-group">
+                  <label for="feed-safety" data-i18n="f_mode">Mode</label>
+                  <select id="feed-safety">
+                    <option value="exact" data-i18n="f_exact">Exact</option>
+                    <option value="floor" data-i18n="f_floor">Non-negative</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="actions-row">
+                <button class="btn btn-primary btn-block" id="btn-feed" type="button" data-i18n="f_btn">Calculate feed plan</button>
+                <button class="btn btn-secondary" id="btn-feed-defaults" type="button" data-i18n="f_defaults">Defaults</button>
+              </div>
             </div>
 
-            <div class="eq-block mono">mM = (g/L ÷ MW) × 1000</div>
-            <div class="eq-block mono">q = (ΔC / IVCD) × 24</div>
+            <div class="result" id="res-feed" aria-live="polite">
+              <div class="result-head">
+                <p class="result-title" data-i18n="res_title">Results</p>
+                <span class="pill mono" id="feed-status-pill" hidden>—</span>
+              </div>
+              <ul class="result-list">
+                <li class="row">
+                  <div class="k" data-i18n="f_out_glc">Glucose feed <span class="unit">(mL)</span></div>
+                  <div class="v mono" id="out-fglc">---</div>
+                </li>
+                <li class="row">
+                  <div class="k" data-i18n="f_out_gln">Glutamine feed <span class="unit">(mL)</span></div>
+                  <div class="v mono" id="out-fgln">---</div>
+                </li>
+              </ul>
 
-            <div class="info-text" data-i18n="q_p2">
-              Sign convention: q > 0 indicates net consumption; q < 0 indicates net accumulation.
+              <details>
+                <summary data-i18n="details">Details & assumptions</summary>
+                <div class="meta" id="feed-meta"></div>
+              </details>
             </div>
-          </article>
+          </div>
         </div>
       </section>
     </main>
 
     <footer>
-      <strong data-i18n="author">Author: Emiliano Balderas</strong><br />
-      <span data-i18n="authorBio">Biotechnology Engineer · PhD Student in Biochemistry · IBt-UNAM · Host Cell Lab Suite</span>
+      <strong data-i18n="author">Autor: Emiliano Balderas</strong><br />
+      <span data-i18n="authorBio">Ingeniero en Biotecnología · Doctorado en Bioquímica · IBt-UNAM · Host Cell Lab Suite</span>
     </footer>
+  </div>
+
+  <!-- Info sheet (moved fundamentals here to reduce clutter) -->
+  <div class="sheet-backdrop" id="sheet-backdrop" role="dialog" aria-modal="true" aria-labelledby="sheet-title" aria-hidden="true">
+    <div class="sheet" role="document">
+      <div class="sheet-header">
+        <h3 class="sheet-title" id="sheet-title" data-i18n="info_title">Scientific fundamentals & warnings</h3>
+        <button class="btn btn-ghost" id="btn-close-sheet" type="button" data-i18n="btnClose">
+          <span>Close</span>
+        </button>
+      </div>
+      <div class="sheet-body">
+        <div class="section">
+          <h4 data-i18n="sci_title">Scientific fundamentals</h4>
+          <p data-i18n="sci_p1">PulseGrowth uses an exponential growth model between two sampling points to estimate μ and doubling time.</p>
+          <div class="formula mono">X = X₀ · e^(μ · t)</div>
+          <div class="formula mono">μ = ln(X₁ / X₀) / Δt</div>
+          <div class="formula mono">t<sub>d</sub> = ln(2) / μ</div>
+          <p style="margin-top:10px;" data-i18n="sci_p2">For metabolite-specific rates, IVCD is estimated assuming exponential behavior within the interval.</p>
+          <div class="formula mono">IVCD = ((X₁ − X₀) / ln(X₁ / X₀)) · Δt</div>
+        </div>
+
+        <div class="section">
+          <h4 data-i18n="q_title">qGlc / qGln logic (unit-consistent)</h4>
+          <p data-i18n="q_p1">To keep q comparable across inputs, the app converts g/L to mM using MW and reports q in pmol/cell/day.</p>
+          <div class="formula mono">mM = (g/L ÷ MW) × 1000</div>
+          <div class="formula mono">q = (ΔC / IVCD) × 24</div>
+          <p style="margin-top:10px;" data-i18n="q_p2">Sign convention: q &gt; 0 indicates net consumption; q &lt; 0 indicates net accumulation.</p>
+        </div>
+
+        <div class="section">
+          <h4 data-i18n="warn_title">Practical warnings</h4>
+          <p data-i18n="warn_p1">These calculations assume the culture behaves approximately exponentially between the two sampling points. If μ is low or negative, interpret IVCD and q with caution.</p>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
     /**
-     * PulseGrowth | Refactor (ES/EN + clarity)
-     * - Global font: sans (avoid case confusion)
-     * - Section titles keep telemetry monospace
-     * - Removed datetime option
-     * - Placeholders instead of "pre-used" default values in kinetics
-     * - Fixed Clear All
+     * PulseGrowth | iOS-like UI refresh
+     * - Modules as tabs (reduces clutter)
+     * - Fundamentals moved to Info sheet (discreet warnings)
+     * - Feed module now supports explicit "current" inputs, with one-tap sync from Metabolics C1
      */
 
     const APP = {
       lang: "es",
+      activeTab: "kin",
       deferredInstallPrompt: null
     };
 
@@ -832,9 +1215,25 @@
     const I18N = {
       es: {
         subtitle: "Host Cell Lab Suite · Kinetic Precision",
-        btnDocs: "[ Documentación / Repo ]",
-        btnClear: "[ Limpiar todo ]",
-        btnInstall: "[ Instalar App ]",
+        btnDocs: "[ Repo ]",
+        btnClear: "[ Limpiar ]",
+        btnInstall: "[ Instalar ]",
+        btnInfo: "Info",
+        btnClose: "Cerrar",
+
+        tab_kin: "Bio-Kinetics",
+        tab_met: "Metabolics (q)",
+        tab_feed: "Feed Control",
+
+        tile_kin: "Bio-Kinetics",
+        tile_kin_sub: "μ · duplicación · IVCD",
+        tile_met: "Metabolics (q)",
+        tile_met_sub: "qGlc · qGln",
+        tile_feed: "Feed Control",
+        tile_feed_sub: "plan de corrección",
+
+        res_title: "Resultados",
+        details: "Detalles y supuestos",
 
         k_title: "01. Bio-Kinetics",
         k_hint: "Métricas de crecimiento (μ, duplicación, expansión, IVCD)",
@@ -850,14 +1249,27 @@
 
         m_title: "02. Metabolics (q)",
         m_hint: "qGlc / qGln normalizados por IVCD · salida consistente",
+        m_hint2: "Tip: puedes calcular q para Glc, Gln o ambos.",
+        m_calc_glc: "Calcular Glc",
+        m_calc_gln: "Calcular Gln",
         m_glc: "Glucosa, Glc <span class=\"unit\">(C0 → C1)</span>",
         m_gln: "Glutamina, Gln <span class=\"unit\">(C0 → C1)</span>",
         m_btn: "Calcular q",
 
         f_title: "03. Feed Control",
+        f_calc_glc: "Calcular Glc",
+        f_calc_gln: "Calcular Gln",
         f_hint: "Plan simple para llegar a meta de Glc / Gln",
-        f_sglc: "Stock Glc <span class=\"unit\">(g/L)</span>",
-        f_sgln: "Stock Gln <span class=\"unit\">(mM)</span>",
+        f_sync: "Usar C1 de Metabolics",
+        f_defaults: "Defaults",
+        f_curr: "Concentraciones actuales",
+        f_curr_glc: "Glc actual <span class=\"unit\">(g/L)</span>",
+        f_curr_gln: "Gln actual <span class=\"unit\">(mM)</span>",
+        f_curr_hint: "Puedes ingresarlas directo, o traerlas desde C1 (Metabolics).",
+        f_stocks: "Soluciones stock",
+        f_targets: "Cultivo + metas",
+        f_sglc: "Stock Glc",
+        f_sgln: "Stock Gln",
         f_v: "Volumen de cultivo <span class=\"unit\">(mL)</span>",
         f_tglc: "Meta Glc <span class=\"unit\">(g/L)</span>",
         f_tgln: "Meta Gln <span class=\"unit\">(mM)</span>",
@@ -868,13 +1280,15 @@
         f_out_glc: "Feed de glucosa <span class=\"unit\">(mL)</span>",
         f_out_gln: "Feed de glutamina <span class=\"unit\">(mL)</span>",
 
+        info_title: "Fundamentos y advertencias",
         sci_title: "Fundamentos científicos",
         sci_p1: "PulseGrowth usa un modelo de crecimiento exponencial entre dos puntos para estimar μ y el tiempo de duplicación.",
         sci_p2: "Para tasas específicas de metabolitos, IVCD se estima asumiendo comportamiento exponencial en el intervalo.",
-
         q_title: "Lógica de qGlc / qGln (consistente en unidades)",
         q_p1: "Para hacer q comparable, la app convierte g/L a mM usando MW y reporta q en pmol/cell/day.",
         q_p2: "Convención de signo: q > 0 indica consumo neto; q < 0 indica acumulación neta.",
+        warn_title: "Advertencias prácticas",
+        warn_p1: "Estos cálculos asumen comportamiento aproximadamente exponencial entre dos muestreos. Si μ es baja o negativa, interpreta IVCD y q con cautela.",
 
         author: "Autor: Emiliano Balderas",
         authorBio: "Ingeniero en Biotecnología · Doctorado en Bioquímica · IBt-UNAM · Host Cell Lab Suite",
@@ -884,6 +1298,13 @@
         ph_x1: "Ej. 3.0",
         ph_c0: "C0",
         ph_c1: "C1",
+        ph_cur_glc: "Ej. 2.5",
+        ph_cur_gln: "Ej. 1.8",
+        ph_stock_glc: "Ej. 200",
+        ph_stock_gln: "Ej. 200",
+        ph_v: "Ej. 30",
+        ph_tglc: "Ej. 5",
+        ph_tgln: "Ej. 4",
 
         err_missing: "Ingresa X0, X1 y Δt válidos (>0).",
         err_ivcd: "IVCD inválido. Revisa X0, X1 y Δt.",
@@ -896,14 +1317,31 @@
         na_mu: "N/A (μ ≤ 0)",
         feed_mode_floor: "Modo no negativo: cualquier feed < 0 se muestra como 0.",
         feed_mode_exact: "Modo exacto: puede ser negativo si ya estás arriba de la meta.",
-        feed_need_final: "Tip: el Feed usa C1 (final) de Glc/Gln si lo ingresaste."
+        feed_need_current: "Ingresa Glc/Gln actuales o usa el botón: Usar C1 de Metabolics.",
+        feed_used_from_met: "Actual tomado de Metabolics C1"
       },
 
       en: {
         subtitle: "Host Cell Lab Suite · Kinetic Precision",
-        btnDocs: "[ Docs / Repo ]",
-        btnClear: "[ Clear all ]",
-        btnInstall: "[ Install App ]",
+        btnDocs: "[ Repo ]",
+        btnClear: "[ Clear ]",
+        btnInstall: "[ Install ]",
+        btnInfo: "Info",
+        btnClose: "Close",
+
+        tab_kin: "Bio-Kinetics",
+        tab_met: "Metabolics (q)",
+        tab_feed: "Feed Control",
+
+        tile_kin: "Bio-Kinetics",
+        tile_kin_sub: "μ · doubling · IVCD",
+        tile_met: "Metabolics (q)",
+        tile_met_sub: "qGlc · qGln",
+        tile_feed: "Feed Control",
+        tile_feed_sub: "simple correction plan",
+
+        res_title: "Results",
+        details: "Details & assumptions",
 
         k_title: "01. Bio-Kinetics",
         k_hint: "Growth metrics (μ, doubling time, expansion factor, IVCD)",
@@ -919,14 +1357,27 @@
 
         m_title: "02. Metabolics (q)",
         m_hint: "qGlc / qGln normalized by IVCD · consistent output",
+        m_hint2: "Tip: compute q for Glc, Gln, or both.",
+        m_calc_glc: "Compute Glc",
+        m_calc_gln: "Compute Gln",
         m_glc: "Glucose, Glc <span class=\"unit\">(C0 → C1)</span>",
         m_gln: "Glutamine, Gln <span class=\"unit\">(C0 → C1)</span>",
         m_btn: "Calculate q",
 
         f_title: "03. Feed Control",
+        f_calc_glc: "Compute Glc",
+        f_calc_gln: "Compute Gln",
         f_hint: "Simple correction plan to reach target Glc / Gln",
-        f_sglc: "Glc stock <span class=\"unit\">(g/L)</span>",
-        f_sgln: "Gln stock <span class=\"unit\">(mM)</span>",
+        f_sync: "Use C1 from Metabolics",
+        f_defaults: "Defaults",
+        f_curr: "Current concentrations",
+        f_curr_glc: "Current Glc <span class=\"unit\">(g/L)</span>",
+        f_curr_gln: "Current Gln <span class=\"unit\">(mM)</span>",
+        f_curr_hint: "Enter current values directly, or pull them from C1 (Metabolics).",
+        f_stocks: "Stock solutions",
+        f_targets: "Culture + targets",
+        f_sglc: "Glc stock",
+        f_sgln: "Gln stock",
         f_v: "Culture volume <span class=\"unit\">(mL)</span>",
         f_tglc: "Target Glc <span class=\"unit\">(g/L)</span>",
         f_tgln: "Target Gln <span class=\"unit\">(mM)</span>",
@@ -937,13 +1388,15 @@
         f_out_glc: "Glucose feed <span class=\"unit\">(mL)</span>",
         f_out_gln: "Glutamine feed <span class=\"unit\">(mL)</span>",
 
+        info_title: "Scientific fundamentals & warnings",
         sci_title: "Scientific fundamentals",
         sci_p1: "PulseGrowth uses an exponential growth model between two sampling points to estimate μ and doubling time.",
         sci_p2: "For metabolite-specific rates, IVCD is estimated assuming exponential behavior within the interval.",
-
         q_title: "qGlc / qGln logic (unit-consistent)",
-        q_p1: "To keep q comparable, the app converts g/L to mM using MW and reports q in pmol/cell/day.",
+        q_p1: "To keep q comparable across inputs, the app converts g/L to mM using MW and reports q in pmol/cell/day.",
         q_p2: "Sign convention: q > 0 indicates net consumption; q < 0 indicates net accumulation.",
+        warn_title: "Practical warnings",
+        warn_p1: "These calculations assume the culture behaves approximately exponentially between the two sampling points. If μ is low or negative, interpret IVCD and q with caution.",
 
         author: "Author: Emiliano Balderas",
         authorBio: "Biotechnology Engineer · PhD Student in Biochemistry · IBt-UNAM · Host Cell Lab Suite",
@@ -953,6 +1406,13 @@
         ph_x1: "e.g. 3.0",
         ph_c0: "C0",
         ph_c1: "C1",
+        ph_cur_glc: "e.g. 2.5",
+        ph_cur_gln: "e.g. 1.8",
+        ph_stock_glc: "e.g. 200",
+        ph_stock_gln: "e.g. 200",
+        ph_v: "e.g. 30",
+        ph_tglc: "e.g. 5",
+        ph_tgln: "e.g. 4",
 
         err_missing: "Enter valid X0, X1, and Δt (>0).",
         err_ivcd: "Invalid IVCD. Check X0, X1, and Δt.",
@@ -965,16 +1425,33 @@
         na_mu: "N/A (μ ≤ 0)",
         feed_mode_floor: "Non-negative mode: any feed < 0 is shown as 0.",
         feed_mode_exact: "Exact mode: may be negative if already above target.",
-        feed_need_final: "Tip: Feed uses Glc/Gln C1 (final) if provided."
+        feed_need_current: "Enter current Glc/Gln or use: Use C1 from Metabolics.",
+        feed_used_from_met: "Current pulled from Metabolics C1"
       }
     };
 
     const DOM = {
+      // language
       langEs: document.getElementById("lang-es"),
       langEn: document.getElementById("lang-en"),
 
+      // top actions
       btnClearAll: document.getElementById("btn-clear-all"),
       btnInstall: document.getElementById("install-btn"),
+      btnInfo: document.getElementById("btn-info"),
+
+      // sheet
+      sheetBackdrop: document.getElementById("sheet-backdrop"),
+      btnCloseSheet: document.getElementById("btn-close-sheet"),
+
+      // tabs + panels
+      tabs: Array.from(document.querySelectorAll('[data-tab]')),
+      panels: {
+        kin: document.getElementById('panel-kin'),
+        met: document.getElementById('panel-met'),
+        feed: document.getElementById('panel-feed')
+      },
+      tiles: Array.from(document.querySelectorAll('[data-go]')),
 
       cards: {
         kinetics: document.getElementById("card-kinetics"),
@@ -982,7 +1459,7 @@
         feed: document.getElementById("card-feed")
       },
 
-      // Kinetics
+      // kinetics
       dtHours: document.getElementById("dt-hours"),
       dtUnit: document.getElementById("dt-unit"),
       x0: document.getElementById("x0"),
@@ -994,9 +1471,12 @@
       outExp: document.getElementById("out-exp"),
       outIvcd: document.getElementById("out-ivcd"),
       kinMeta: document.getElementById("kin-meta"),
+      kinStatusPill: document.getElementById("kin-status-pill"),
 
-      // Metabolics
+      // metabolics
       glc0: document.getElementById("glc0"),
+      doQglc: document.getElementById("do-qglc"),
+      doQgln: document.getElementById("do-qgln"),
       glc1m: document.getElementById("glc1m"),
       uGlc: document.getElementById("u-glc"),
       gln0: document.getElementById("gln0"),
@@ -1009,8 +1489,15 @@
       outQgln: document.getElementById("out-qgln"),
       outQglnPg: document.getElementById("out-qgln-pg"),
       metMeta: document.getElementById("met-meta"),
+      metStatusPill: document.getElementById("met-status-pill"),
 
-      // Feed
+      // feed
+      doFeedGlc: document.getElementById("do-feed-glc"),
+      doFeedGln: document.getElementById("do-feed-gln"),
+      uSGlc: document.getElementById("u-s-glc"),
+      uSGln: document.getElementById("u-s-gln"),
+      curGlc: document.getElementById("cur-glc"),
+      curGln: document.getElementById("cur-gln"),
       sGlc: document.getElementById("s-glc"),
       sGln: document.getElementById("s-gln"),
       vCult: document.getElementById("v-cult"),
@@ -1018,10 +1505,13 @@
       tGln: document.getElementById("t-gln"),
       feedSafety: document.getElementById("feed-safety"),
       btnFeed: document.getElementById("btn-feed"),
+      btnFeedDefaults: document.getElementById("btn-feed-defaults"),
+      btnFeedSync: document.getElementById("btn-feed-sync"),
       resFeed: document.getElementById("res-feed"),
       outFglc: document.getElementById("out-fglc"),
       outFgln: document.getElementById("out-fgln"),
-      feedMeta: document.getElementById("feed-meta")
+      feedMeta: document.getElementById("feed-meta"),
+      feedStatusPill: document.getElementById("feed-status-pill")
     };
 
     /* ---------- i18n ---------- */
@@ -1033,20 +1523,22 @@
     function applyTranslations(lang) {
       const pack = I18N[lang] || I18N.es;
 
-      document.querySelectorAll("[data-i18n]").forEach((el) => {
-        const key = el.getAttribute("data-i18n");
+      document.querySelectorAll('[data-i18n]').forEach((el) => {
+        const key = el.getAttribute('data-i18n');
         if (pack[key]) el.innerHTML = pack[key];
       });
 
-      document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
-        const key = el.getAttribute("data-i18n-placeholder");
-        if (pack[key]) el.setAttribute("placeholder", pack[key]);
+      document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (pack[key]) el.setAttribute('placeholder', pack[key]);
       });
 
-      DOM.langEs.classList.toggle("active", lang === "es");
-      DOM.langEn.classList.toggle("active", lang === "en");
+      DOM.langEs.classList.toggle('active', lang === 'es');
+      DOM.langEn.classList.toggle('active', lang === 'en');
+      DOM.langEs.setAttribute('aria-selected', String(lang === 'es'));
+      DOM.langEn.setAttribute('aria-selected', String(lang === 'en'));
 
-      // Update option labels for feed mode (since <option data-i18n> won't auto-render reliably in some browsers)
+      // Feed mode options
       const optExact = DOM.feedSafety.querySelector('option[value="exact"]');
       const optFloor = DOM.feedSafety.querySelector('option[value="floor"]');
       if (optExact) optExact.textContent = pack.f_exact;
@@ -1057,13 +1549,50 @@
       if (!I18N[lang]) return;
       APP.lang = lang;
       applyTranslations(lang);
-      try { localStorage.setItem("pulsegrowth_lang", lang); } catch (_) {}
+      try { localStorage.setItem('pulsegrowth_lang', lang); } catch (_) {}
+
+      // Update any visible status pills (in case language changed)
+      if (DOM.resKin.classList.contains('visible')) renderKinetics();
+      if (DOM.resMet.classList.contains('visible')) renderMetabolics();
+      if (DOM.resFeed.classList.contains('visible')) renderFeed();
     }
 
     function loadSavedLanguage() {
       try {
-        const saved = localStorage.getItem("pulsegrowth_lang");
+        const saved = localStorage.getItem('pulsegrowth_lang');
         if (saved && I18N[saved]) APP.lang = saved;
+      } catch (_) {}
+    }
+
+    /* ---------- Tabs ---------- */
+    function setActiveTab(key) {
+      if (!DOM.panels[key]) return;
+      APP.activeTab = key;
+
+      DOM.tabs.forEach((b) => {
+        const isOn = b.dataset.tab === key;
+        b.setAttribute('aria-selected', String(isOn));
+      });
+
+      Object.entries(DOM.panels).forEach(([k, el]) => {
+        el.classList.toggle('active', k === key);
+      });
+
+      DOM.tiles.forEach((tile) => {
+        const isOn = tile.dataset.go === key;
+        tile.classList.toggle('active', isOn);
+      });
+
+      try { localStorage.setItem('pulsegrowth_tab', key); } catch (_) {}
+
+      // scroll to top of content for iOS feel
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function loadSavedTab() {
+      try {
+        const saved = localStorage.getItem('pulsegrowth_tab');
+        if (saved && DOM.panels[saved]) APP.activeTab = saved;
       } catch (_) {}
     }
 
@@ -1080,41 +1609,69 @@
 
     function toHours(value, unit) {
       if (!Number.isFinite(value)) return NaN;
-      return unit === "d" ? value * 24 : value;
+      return unit === 'd' ? value * 24 : value;
     }
 
     function formatNumber(value, decimals = 4) {
-      if (!Number.isFinite(value)) return "ERR";
+      if (!Number.isFinite(value)) return 'ERR';
       const abs = Math.abs(value);
       if (abs >= 1000 || (abs > 0 && abs < 0.001)) return value.toExponential(3);
-      return value.toFixed(decimals).replace(/\.?0+$/, "");
+      return value.toFixed(decimals).replace(/\.?0+$/, '');
     }
 
     function setCardValidity(cardEl, isValid = true) {
-      cardEl.classList.toggle("invalid", !isValid);
+      cardEl.classList.toggle('invalid', !isValid);
     }
 
-    function showBox(boxEl, mode = "normal") {
-      boxEl.classList.add("visible");
-      boxEl.classList.remove("error", "warn");
-      if (mode === "error") boxEl.classList.add("error");
-      if (mode === "warn") boxEl.classList.add("warn");
+    function showBox(boxEl, mode = 'normal') {
+      boxEl.classList.add('visible');
+      boxEl.classList.remove('error', 'warn');
+      if (mode === 'error') boxEl.classList.add('error');
+      if (mode === 'warn') boxEl.classList.add('warn');
     }
 
     function hideBox(boxEl) {
-      boxEl.classList.remove("visible", "error", "warn");
+      boxEl.classList.remove('visible', 'error', 'warn');
     }
 
     function concentrationToMilliMolar(value, unitCode, mw_gmol) {
       if (!Number.isFinite(value)) return NaN;
-      if (unitCode === "mm") return value;
-      if (unitCode === "gl") return (value / mw_gmol) * 1000; // g/L -> mM
+      if (unitCode === 'mm') return value;
+      if (unitCode === 'gl') return (value / mw_gmol) * 1000; // g/L -> mM
       return NaN;
     }
 
     function mMTo_gL(value_mM, mw_gmol) {
       if (!Number.isFinite(value_mM)) return NaN;
       return (value_mM * mw_gmol) / 1000; // mM -> g/L
+    }
+
+
+
+    function stockTo_gL(value, unitCode, mw_gmol) {
+      if (!Number.isFinite(value)) return NaN;
+      switch (unitCode) {
+        case 'gL': return value;
+        case 'gml': return value * 1000; // g/mL -> g/L
+        case 'mgml': return value; // mg/mL == g/L
+        case 'pct': return value * 10; // % w/v (g/100 mL) -> g/L
+        case 'mM': return mMTo_gL(value, mw_gmol);
+        case 'M':  return mMTo_gL(value * 1000, mw_gmol);
+        default: return NaN;
+      }
+    }
+
+    function stockTo_mM(value, unitCode, mw_gmol) {
+      if (!Number.isFinite(value)) return NaN;
+      switch (unitCode) {
+        case 'mM': return value;
+        case 'M':  return value * 1000;
+        case 'gL': return concentrationToMilliMolar(value, 'gl', mw_gmol);
+        case 'gml': return concentrationToMilliMolar(value * 1000, 'gl', mw_gmol);
+        case 'mgml': return concentrationToMilliMolar(value, 'gl', mw_gmol);
+        case 'pct': return concentrationToMilliMolar(value * 10, 'gl', mw_gmol);
+        default: return NaN;
+      }
     }
 
     function qFromDeltaMolarity(delta_mM, ivcd_h) {
@@ -1128,10 +1685,10 @@
     }
 
     function growthStateTag(mu_h) {
-      if (!Number.isFinite(mu_h)) return { text: "μ invalid", className: "warn" };
-      if (mu_h <= 0) return { text: t("stat_warn_nogrowth"), className: "warn" };
-      if (mu_h < 0.015) return { text: t("stat_warn_low"), className: "warn" };
-      return { text: t("stat_ok"), className: "ok" };
+      if (!Number.isFinite(mu_h)) return { text: 'μ invalid', className: 'warn' };
+      if (mu_h <= 0) return { text: t('stat_warn_nogrowth'), className: 'warn' };
+      if (mu_h < 0.015) return { text: t('stat_warn_low'), className: 'warn' };
+      return { text: t('stat_ok'), className: 'ok' };
     }
 
     /* ---------- kinetics ---------- */
@@ -1148,7 +1705,7 @@
       const dt_h = getDeltaTHours();
 
       if (!(x0 > 0 && x1 > 0 && dt_h > 0)) {
-        return { ok: false, error: t("err_missing") };
+        return { ok: false, error: t('err_missing') };
       }
 
       const mu_h = Math.log(x1 / x0) / dt_h;
@@ -1171,16 +1728,33 @@
       };
     }
 
+    function setStatusPill(el, { text, className }) {
+      if (!el) return;
+      el.hidden = false;
+      el.textContent = text;
+      el.classList.remove('ok', 'warn');
+      el.classList.add(className);
+    }
+
+    function hideStatusPill(el) {
+      if (!el) return;
+      el.hidden = true;
+      el.textContent = '';
+      el.classList.remove('ok', 'warn');
+    }
+
     function renderKinetics() {
       const k = computeKinetics();
 
       if (!k.ok) {
         setCardValidity(DOM.cards.kinetics, false);
-        showBox(DOM.resKin, "error");
-        DOM.outMu.textContent = "ERR";
-        DOM.outTd.textContent = "ERR";
-        DOM.outExp.textContent = "ERR";
-        DOM.outIvcd.textContent = "ERR";
+        showBox(DOM.resKin, 'error');
+        hideStatusPill(DOM.kinStatusPill);
+
+        DOM.outMu.textContent = 'ERR';
+        DOM.outTd.textContent = 'ERR';
+        DOM.outExp.textContent = 'ERR';
+        DOM.outIvcd.textContent = 'ERR';
         DOM.kinMeta.textContent = k.error;
         return null;
       }
@@ -1191,191 +1765,383 @@
       DOM.outMu.textContent = `${formatNumber(k.mu_h, 5)} h⁻¹  |  ${formatNumber(k.mu_d, 4)} d⁻¹`;
       DOM.outTd.textContent = Number.isFinite(k.td_h)
         ? `${formatNumber(k.td_h, 2)} h  |  ${formatNumber(k.td_d, 2)} d`
-        : t("na_mu");
+        : t('na_mu');
       DOM.outExp.textContent = `${formatNumber(k.expansion, 3)}x`;
-      DOM.outIvcd.textContent = Number.isFinite(k.ivcd) ? formatNumber(k.ivcd, 4) : "N/A";
+      DOM.outIvcd.textContent = Number.isFinite(k.ivcd) ? formatNumber(k.ivcd, 4) : 'N/A';
 
       const tag = growthStateTag(k.mu_h);
+      setStatusPill(DOM.kinStatusPill, tag);
+
       DOM.kinMeta.innerHTML = `
-        <span class="small-tag ${tag.className}">${tag.text}</span>
-        <span class="small-tag">${t("meta_dt")} = ${formatNumber(k.dt_h, 2)} h</span>
-        <span class="small-tag">${t("meta_x0")} = ${formatNumber(k.x0, 3)}</span>
-        <span class="small-tag">${t("meta_x1")} = ${formatNumber(k.x1, 3)}</span>
+        <div class="tags">
+          <span class="tag ${tag.className}">${tag.text}</span>
+          <span class="tag">${t('meta_dt')} = ${formatNumber(k.dt_h, 2)} h</span>
+          <span class="tag">${t('meta_x0')} = ${formatNumber(k.x0, 3)}</span>
+          <span class="tag">${t('meta_x1')} = ${formatNumber(k.x1, 3)}</span>
+        </div>
       `;
 
       return k;
     }
 
     /* ---------- metabolics ---------- */
-    function computeSingleQ({ c0Input, c1Input, unitCode, mw }) {
+    function computeSingleQ({ c0Input, c1Input, unitCode, mw, kinetics }) {
       if (!(Number.isFinite(c0Input) && Number.isFinite(c1Input))) return { ok: false, skipped: true };
 
       const c0_mM = concentrationToMilliMolar(c0Input, unitCode, mw);
       const c1_mM = concentrationToMilliMolar(c1Input, unitCode, mw);
       if (!(Number.isFinite(c0_mM) && Number.isFinite(c1_mM))) {
-        return { ok: false, error: "Unit conversion error." };
+        return { ok: false, error: 'Unit conversion error.' };
       }
 
-      const kinetics = computeKinetics();
-      if (!kinetics.ok || !(kinetics.ivcd > 0)) {
-        return { ok: false, error: t("err_ivcd") };
+      const k = kinetics || computeKinetics();
+      if (!k.ok || !(k.ivcd > 0)) {
+        return { ok: false, error: t('err_ivcd') };
       }
 
       const delta_mM = c0_mM - c1_mM;
-      const q_pmol = qFromDeltaMolarity(delta_mM, kinetics.ivcd);
+      const q_pmol = qFromDeltaMolarity(delta_mM, k.ivcd);
       const q_pg = pmolToPg(q_pmol, mw);
 
       return { ok: true, delta_mM, q_pmol, q_pg };
     }
 
-    function renderMetabolics() {
+        function renderMetabolics() {
+      const doGlc = Boolean(DOM.doQglc?.checked);
+      const doGln = Boolean(DOM.doQgln?.checked);
+
+      if (!doGlc && !doGln) {
+        setCardValidity(DOM.cards.metabolics, false);
+        showBox(DOM.resMet, 'warn');
+        hideStatusPill(DOM.metStatusPill);
+
+        DOM.outQglc.textContent = '---';
+        DOM.outQglcPg.textContent = '---';
+        DOM.outQgln.textContent = '---';
+        DOM.outQglnPg.textContent = '---';
+        DOM.metMeta.textContent = (APP.lang === 'es')
+          ? 'Selecciona al menos un analito (Glc o Gln).'
+          : 'Select at least one analyte (Glc or Gln).';
+        return;
+      }
+
+      const kin = computeKinetics();
+
       const glc0 = parseNum(DOM.glc0);
       const glc1 = parseNum(DOM.glc1m);
       const gln0 = parseNum(DOM.gln0);
       const gln1 = parseNum(DOM.gln1m);
 
-      const qGlc = computeSingleQ({ c0Input: glc0, c1Input: glc1, unitCode: DOM.uGlc.value, mw: MW.glc });
-      const qGln = computeSingleQ({ c0Input: gln0, c1Input: gln1, unitCode: DOM.uGln.value, mw: MW.gln });
+      const qGlc = doGlc
+        ? computeSingleQ({ c0Input: glc0, c1Input: glc1, unitCode: DOM.uGlc.value, mw: MW.glc, kinetics: kin })
+        : { ok: false, skipped: true };
 
-      const anyOk = qGlc.ok || qGln.ok;
+      const qGln = doGln
+        ? computeSingleQ({ c0Input: gln0, c1Input: gln1, unitCode: DOM.uGln.value, mw: MW.gln, kinetics: kin })
+        : { ok: false, skipped: true };
+
+      const anyOk = (qGlc.ok || qGln.ok);
       const anyHardError = [qGlc, qGln].some(r => r.ok === false && !r.skipped && r.error);
+
+      // If kinetics is missing but user provided concentrations, surface as a gentle error
+      const needsKinetics = (doGlc && Number.isFinite(glc0) && Number.isFinite(glc1)) || (doGln && Number.isFinite(gln0) && Number.isFinite(gln1));
+      const kinOk = kin.ok && (kin.ivcd > 0);
+
+      if (!kinOk && needsKinetics && !anyOk) {
+        setCardValidity(DOM.cards.metabolics, false);
+        showBox(DOM.resMet, 'warn');
+        hideStatusPill(DOM.metStatusPill);
+
+        DOM.outQglc.textContent = doGlc ? '---' : '---';
+        DOM.outQglcPg.textContent = doGlc ? '---' : '---';
+        DOM.outQgln.textContent = doGln ? '---' : '---';
+        DOM.outQglnPg.textContent = doGln ? '---' : '---';
+        DOM.metMeta.textContent = t('err_ivcd');
+        return;
+      }
 
       if (!anyOk && anyHardError) {
         setCardValidity(DOM.cards.metabolics, false);
-        showBox(DOM.resMet, "error");
-        DOM.outQglc.textContent = "ERR";
-        DOM.outQglcPg.textContent = "ERR";
-        DOM.outQgln.textContent = "ERR";
-        DOM.outQglnPg.textContent = "ERR";
-        DOM.metMeta.textContent = (qGlc.error || qGln.error || "Error.");
+        showBox(DOM.resMet, 'error');
+        hideStatusPill(DOM.metStatusPill);
+
+        DOM.outQglc.textContent = doGlc ? 'ERR' : '---';
+        DOM.outQglcPg.textContent = doGlc ? 'ERR' : '---';
+        DOM.outQgln.textContent = doGln ? 'ERR' : '---';
+        DOM.outQglnPg.textContent = doGln ? 'ERR' : '---';
+        DOM.metMeta.textContent = (qGlc.error || qGln.error || 'Error.');
         return;
       }
 
       if (!anyOk) {
         setCardValidity(DOM.cards.metabolics, false);
-        showBox(DOM.resMet, "warn");
-        DOM.outQglc.textContent = "---";
-        DOM.outQglcPg.textContent = "---";
-        DOM.outQgln.textContent = "---";
-        DOM.outQglnPg.textContent = "---";
-        DOM.metMeta.textContent = "Enter Glc and/or Gln C0→C1 to compute q.";
-        if (APP.lang === "es") DOM.metMeta.textContent = "Ingresa Glc y/o Gln (C0→C1) para calcular q.";
+        showBox(DOM.resMet, 'warn');
+        hideStatusPill(DOM.metStatusPill);
+
+        DOM.outQglc.textContent = doGlc ? '---' : '---';
+        DOM.outQglcPg.textContent = doGlc ? '---' : '---';
+        DOM.outQgln.textContent = doGln ? '---' : '---';
+        DOM.outQglnPg.textContent = doGln ? '---' : '---';
+        DOM.metMeta.textContent = (APP.lang === 'es')
+          ? 'Ingresa C0→C1 para el/los analito(s) seleccionado(s).'
+          : 'Enter C0→C1 for the selected analyte(s).';
         return;
       }
 
       setCardValidity(DOM.cards.metabolics, true);
       showBox(DOM.resMet);
 
-      if (qGlc.ok) {
+      // status: mirror kinetics state
+      if (kin.ok) {
+        const tag = growthStateTag(kin.mu_h);
+        setStatusPill(DOM.metStatusPill, tag);
+      } else {
+        hideStatusPill(DOM.metStatusPill);
+      }
+
+      // outputs
+      if (doGlc && qGlc.ok) {
         DOM.outQglc.textContent = formatNumber(qGlc.q_pmol, 3);
         DOM.outQglcPg.textContent = formatNumber(qGlc.q_pg, 2);
       } else {
-        DOM.outQglc.textContent = "---";
-        DOM.outQglcPg.textContent = "---";
+        DOM.outQglc.textContent = '---';
+        DOM.outQglcPg.textContent = '---';
       }
 
-      if (qGln.ok) {
+      if (doGln && qGln.ok) {
         DOM.outQgln.textContent = formatNumber(qGln.q_pmol, 3);
         DOM.outQglnPg.textContent = formatNumber(qGln.q_pg, 2);
       } else {
-        DOM.outQgln.textContent = "---";
-        DOM.outQglnPg.textContent = "---";
+        DOM.outQgln.textContent = '---';
+        DOM.outQglnPg.textContent = '---';
       }
 
-      DOM.metMeta.innerHTML = `
-        <span class="small-tag">ΔC = C0 − C1</span>
-        <span class="small-tag">${APP.lang === "es" ? "q > 0 consumo" : "q > 0 consumption"}</span>
-        <span class="small-tag">${APP.lang === "es" ? "q < 0 acumulación" : "q < 0 accumulation"}</span>
-      `;
+      const tags = [];
+      tags.push(`<span class="tag">ΔC = C0 − C1</span>`);
+      tags.push(`<span class="tag">${APP.lang === 'es' ? 'q > 0 consumo' : 'q > 0 consumption'}</span>`);
+      tags.push(`<span class="tag">${APP.lang === 'es' ? 'q < 0 acumulación' : 'q < 0 accumulation'}</span>`);
+      if (kinOk) tags.push(`<span class="tag">IVCD = ${formatNumber(kin.ivcd, 4)} (10⁶ cell·h/mL)</span>`);
+
+      DOM.metMeta.innerHTML = `<div class="tags">${tags.join('')}</div>`;
     }
 
     /* ---------- feed ---------- */
     function computeFeedVolume({ current, target, stock, cultureVolume }) {
       if (!(Number.isFinite(current) && Number.isFinite(target) && Number.isFinite(stock) && Number.isFinite(cultureVolume))) {
-        return { ok: false, error: "Invalid feed inputs." };
+        return { ok: false, error: 'Invalid feed inputs.' };
       }
-      if (!(cultureVolume > 0 && stock > 0 && target >= 0)) return { ok: false, error: "Invalid parameters." };
-      if (stock <= target) return { ok: false, error: "Stock must be higher than target." };
+      if (!(cultureVolume > 0 && stock > 0 && target >= 0)) return { ok: false, error: 'Invalid parameters.' };
+      if (stock <= target) return { ok: false, error: 'Stock must be higher than target.' };
 
       const vfeed = ((target - current) * cultureVolume) / (stock - target);
       return { ok: true, vfeed };
     }
 
-    function renderFeed() {
-      const vol = parsePositive(DOM.vCult);
-      const sGlc = parsePositive(DOM.sGlc);
-      const sGln = parsePositive(DOM.sGln);
-      const tGlc = parseNum(DOM.tGlc);
-      const tGln = parseNum(DOM.tGln);
-      const mode = DOM.feedSafety.value;
-
+    function getMetabolicsC1AsFeedCurrent() {
       const glcFinalRaw = parseNum(DOM.glc1m);
       const glnFinalRaw = parseNum(DOM.gln1m);
 
       const currentGlc_gL = Number.isFinite(glcFinalRaw)
-        ? (DOM.uGlc.value === "gl" ? glcFinalRaw : mMTo_gL(glcFinalRaw, MW.glc))
+        ? (DOM.uGlc.value === 'gl' ? glcFinalRaw : mMTo_gL(glcFinalRaw, MW.glc))
         : NaN;
 
       const currentGln_mM = Number.isFinite(glnFinalRaw)
-        ? (DOM.uGln.value === "mm" ? glnFinalRaw : concentrationToMilliMolar(glnFinalRaw, "gl", MW.gln))
+        ? (DOM.uGln.value === 'mm' ? glnFinalRaw : concentrationToMilliMolar(glnFinalRaw, 'gl', MW.gln))
         : NaN;
 
-      const glcFeed = computeFeedVolume({ current: currentGlc_gL, target: tGlc, stock: sGlc, cultureVolume: vol });
-      const glnFeed = computeFeedVolume({ current: currentGln_mM, target: tGln, stock: sGln, cultureVolume: vol });
+      return { currentGlc_gL, currentGln_mM };
+    }
 
-      function normalize(result) {
-        if (!result.ok) return { text: "ERR", err: result.error };
-        let v = result.vfeed;
-        if (mode === "floor" && v < 0) v = 0;
-        return { text: formatNumber(v, 4), err: null };
+    function applyFeedDefaults() {
+      DOM.sGlc.value = '200';
+      if (DOM.uSGlc) DOM.uSGlc.value = 'gL';
+      DOM.sGln.value = '200';
+      if (DOM.uSGln) DOM.uSGln.value = 'mM';
+      DOM.vCult.value = '30';
+      DOM.tGlc.value = '5';
+      DOM.tGln.value = '4';
+      DOM.feedSafety.value = 'exact';
+    }
+
+    function syncFeedCurrentFromMetabolics() {
+      const { currentGlc_gL, currentGln_mM } = getMetabolicsC1AsFeedCurrent();
+      if (Number.isFinite(currentGlc_gL)) DOM.curGlc.value = String(currentGlc_gL);
+      if (Number.isFinite(currentGln_mM)) DOM.curGln.value = String(currentGln_mM);
+    }
+
+        function renderFeed() {
+      const doGlc = Boolean(DOM.doFeedGlc?.checked);
+      const doGln = Boolean(DOM.doFeedGln?.checked);
+
+      if (!doGlc && !doGln) {
+        setCardValidity(DOM.cards.feed, false);
+        showBox(DOM.resFeed, 'warn');
+        hideStatusPill(DOM.feedStatusPill);
+
+        DOM.outFglc.textContent = '---';
+        DOM.outFgln.textContent = '---';
+        DOM.feedMeta.textContent = (APP.lang === 'es')
+          ? 'Selecciona al menos un analito (Glc o Gln).'
+          : 'Select at least one analyte (Glc or Gln).';
+        return;
       }
 
-      const outGlc = normalize(glcFeed);
-      const outGln = normalize(glnFeed);
+      const vol = parsePositive(DOM.vCult);
+      const mode = DOM.feedSafety.value;
 
-      setCardValidity(DOM.cards.feed, !(outGlc.err || outGln.err));
-      showBox(DOM.resFeed, (outGlc.err || outGln.err) ? "error" : "normal");
+      const tGlc = parseNum(DOM.tGlc);
+      const tGln = parseNum(DOM.tGln);
 
-      DOM.outFglc.textContent = outGlc.text;
-      DOM.outFgln.textContent = outGln.text;
+      // Stock conversions (to match target units)
+      const sGlcRaw = parsePositive(DOM.sGlc);
+      const sGlnRaw = parsePositive(DOM.sGln);
 
-      const modeText = (mode === "floor") ? t("feed_mode_floor") : t("feed_mode_exact");
-      const noteText = t("feed_need_final");
+      const sGlc_gL = doGlc ? stockTo_gL(sGlcRaw, DOM.uSGlc.value, MW.glc) : NaN; // used with g/L targets
+      const sGln_mM = doGln ? stockTo_mM(sGlnRaw, DOM.uSGln.value, MW.gln) : NaN; // used with mM targets
+
+      // Current values (allow pulling from metabolics C1)
+      let currentGlc_gL = parseNum(DOM.curGlc);
+      let currentGln_mM = parseNum(DOM.curGln);
+      let usedFromMet = false;
+
+      if ((doGlc && !Number.isFinite(currentGlc_gL)) || (doGln && !Number.isFinite(currentGln_mM))) {
+        const met = getMetabolicsC1AsFeedCurrent();
+        if (doGlc && !Number.isFinite(currentGlc_gL) && Number.isFinite(met.currentGlc_gL)) {
+          currentGlc_gL = met.currentGlc_gL;
+          usedFromMet = true;
+        }
+        if (doGln && !Number.isFinite(currentGln_mM) && Number.isFinite(met.currentGln_mM)) {
+          currentGln_mM = met.currentGln_mM;
+          usedFromMet = true;
+        }
+      }
+
+      function computeOne({ enabled, current, target, stock, unit }) {
+        if (!enabled) return { ok: false, skipped: true };
+
+        // Missing inputs -> skip (warn), not a hard error
+        if (!(Number.isFinite(vol) && vol > 0)) return { ok: false, skipped: true, need: 'vol' };
+        if (!Number.isFinite(current)) return { ok: false, skipped: true, need: 'current' };
+        if (!Number.isFinite(target)) return { ok: false, skipped: true, need: 'target' };
+        if (!(Number.isFinite(stock) && stock > 0)) return { ok: false, skipped: true, need: 'stock' };
+
+        const r = computeFeedVolume({ current, target, stock, cultureVolume: vol });
+        if (!r.ok) return { ok: false, error: r.error };
+
+        let v = r.vfeed;
+        if (mode === 'floor' && v < 0) v = 0;
+        return { ok: true, vfeed: v, unit };
+      }
+
+      const glcFeed = computeOne({
+        enabled: doGlc,
+        current: currentGlc_gL,
+        target: tGlc,
+        stock: sGlc_gL,
+        unit: 'mL'
+      });
+
+      const glnFeed = computeOne({
+        enabled: doGln,
+        current: currentGln_mM,
+        target: tGln,
+        stock: sGln_mM,
+        unit: 'mL'
+      });
+
+      const anyOk = glcFeed.ok || glnFeed.ok;
+      const anyHardError = [glcFeed, glnFeed].some(r => r.ok === false && !r.skipped && r.error);
+
+      if (!anyOk && anyHardError) {
+        setCardValidity(DOM.cards.feed, false);
+        showBox(DOM.resFeed, 'error');
+        hideStatusPill(DOM.feedStatusPill);
+
+        DOM.outFglc.textContent = doGlc ? 'ERR' : '---';
+        DOM.outFgln.textContent = doGln ? 'ERR' : '---';
+
+        const msg = (glcFeed.error || glnFeed.error || 'Error.');
+        DOM.feedMeta.textContent = msg;
+        return;
+      }
+
+      if (!anyOk) {
+        setCardValidity(DOM.cards.feed, false);
+        showBox(DOM.resFeed, 'warn');
+        hideStatusPill(DOM.feedStatusPill);
+
+        DOM.outFglc.textContent = '---';
+        DOM.outFgln.textContent = '---';
+
+        const needs = [];
+        const addNeeds = (r, label) => { if (r.need) needs.push(`${label}: ${r.need}`); };
+        addNeeds(glcFeed, 'Glc');
+        addNeeds(glnFeed, 'Gln');
+
+        DOM.feedMeta.textContent = (APP.lang === 'es')
+          ? 'Completa los campos requeridos (current, target, stock, volumen).'
+          : 'Fill required fields (current, target, stock, volume).';
+        return;
+      }
+
+      // Normal render
+      setCardValidity(DOM.cards.feed, true);
+      showBox(DOM.resFeed);
+
+      DOM.outFglc.textContent = (doGlc && glcFeed.ok) ? formatNumber(glcFeed.vfeed, 4) : '---';
+      DOM.outFgln.textContent = (doGln && glnFeed.ok) ? formatNumber(glnFeed.vfeed, 4) : '---';
+
+      // status pill: show mode
+      setStatusPill(DOM.feedStatusPill, { text: (mode === 'floor') ? (APP.lang === 'es' ? 'No negativo' : 'Non-negative') : (APP.lang === 'es' ? 'Exacto' : 'Exact'), className: 'ok' });
 
       const notes = [];
-      if (Number.isFinite(currentGlc_gL)) notes.push(`Glc C1 = ${formatNumber(currentGlc_gL, 3)} g/L`);
-      if (Number.isFinite(currentGln_mM)) notes.push(`Gln C1 = ${formatNumber(currentGln_mM, 3)} mM`);
+      if (doGlc && Number.isFinite(currentGlc_gL)) notes.push(`Glc current = ${formatNumber(currentGlc_gL, 3)} g/L`);
+      if (doGln && Number.isFinite(currentGln_mM)) notes.push(`Gln current = ${formatNumber(currentGln_mM, 3)} mM`);
+      if (doGlc && Number.isFinite(sGlc_gL)) notes.push(`Glc stock = ${formatNumber(sGlc_gL, 3)} g/L`);
+      if (doGln && Number.isFinite(sGln_mM)) notes.push(`Gln stock = ${formatNumber(sGln_mM, 3)} mM`);
+      if (usedFromMet) notes.push(t('feed_used_from_met'));
+
+      const modeText = (mode === 'floor') ? t('feed_mode_floor') : t('feed_mode_exact');
 
       DOM.feedMeta.innerHTML = `
-        <span class="small-tag">${noteText}</span>
-        ${notes.map(n => `<span class="small-tag">${n}</span>`).join(" ")}
-        <div style="margin-top:6px;">${modeText}${(outGlc.err || outGln.err) ? `<br>${outGlc.err || ""}<br>${outGln.err || ""}` : ""}</div>
+        <div class="tags">
+          ${notes.map(n => `<span class="tag">${n}</span>`).join('')}
+        </div>
+        <div class="meta" style="margin-top:10px;">${modeText}</div>
       `;
     }
 
-    /* ---------- (6) Clear all fixed ---------- */
+    /* ---------- Clear all ---------- */
     function clearAll() {
-      // Kinetics: empty values (placeholders remain)
-      DOM.dtHours.value = "";
-      DOM.dtUnit.value = "h";
-      DOM.x0.value = "";
-      DOM.x1.value = "";
+      // kinetics
+      DOM.dtHours.value = '';
+      DOM.dtUnit.value = 'h';
+      DOM.x0.value = '';
+      DOM.x1.value = '';
 
-      // Metabolics: empty
-      DOM.glc0.value = "";
-      DOM.glc1m.value = "";
-      DOM.uGlc.value = "gl";
-      DOM.gln0.value = "";
-      DOM.gln1m.value = "";
-      DOM.uGln.value = "mm";
+      // metabolics
+      if (DOM.doQglc) DOM.doQglc.checked = true;
+      if (DOM.doQgln) DOM.doQgln.checked = true;
+      DOM.glc0.value = '';
+      DOM.glc1m.value = '';
+      DOM.uGlc.value = 'gl';
+      DOM.gln0.value = '';
+      DOM.gln1m.value = '';
+      DOM.uGln.value = 'mm';
 
-      // Feed: reset to recommended defaults
-      DOM.sGlc.value = "200";
-      DOM.sGln.value = "200";
-      DOM.vCult.value = "30";
-      DOM.tGlc.value = "5";
-      DOM.tGln.value = "4";
-      DOM.feedSafety.value = "exact";
+      // feed
+      if (DOM.doFeedGlc) DOM.doFeedGlc.checked = true;
+      if (DOM.doFeedGln) DOM.doFeedGln.checked = true;
+      if (DOM.uSGlc) DOM.uSGlc.value = 'gL';
+      if (DOM.uSGln) DOM.uSGln.value = 'mM';
+      DOM.curGlc.value = '';
+      DOM.curGln.value = '';
+      DOM.sGlc.value = '';
+      DOM.sGln.value = '';
+      DOM.vCult.value = '';
+      DOM.tGlc.value = '';
+      DOM.tGln.value = '';
+      DOM.feedSafety.value = 'exact';
 
       // Hide results + reset visuals
       hideBox(DOM.resKin);
@@ -1385,98 +2151,161 @@
       setCardValidity(DOM.cards.metabolics, true);
       setCardValidity(DOM.cards.feed, true);
 
-      // Reset output placeholders
-      DOM.outMu.textContent = "---";
-      DOM.outTd.textContent = "---";
-      DOM.outExp.textContent = "---";
-      DOM.outIvcd.textContent = "---";
-      DOM.kinMeta.textContent = "";
-      DOM.outQglc.textContent = "---";
-      DOM.outQglcPg.textContent = "---";
-      DOM.outQgln.textContent = "---";
-      DOM.outQglnPg.textContent = "---";
-      DOM.metMeta.textContent = "";
-      DOM.outFglc.textContent = "---";
-      DOM.outFgln.textContent = "---";
-      DOM.feedMeta.textContent = "";
+      // Reset outputs
+      DOM.outMu.textContent = '---';
+      DOM.outTd.textContent = '---';
+      DOM.outExp.textContent = '---';
+      DOM.outIvcd.textContent = '---';
+      DOM.kinMeta.textContent = '';
+      hideStatusPill(DOM.kinStatusPill);
+
+      DOM.outQglc.textContent = '---';
+      DOM.outQglcPg.textContent = '---';
+      DOM.outQgln.textContent = '---';
+      DOM.outQglnPg.textContent = '---';
+      DOM.metMeta.textContent = '';
+      hideStatusPill(DOM.metStatusPill);
+
+      DOM.outFglc.textContent = '---';
+      DOM.outFgln.textContent = '---';
+      DOM.feedMeta.textContent = '';
+      hideStatusPill(DOM.feedStatusPill);
+    }
+
+    /* ---------- Info sheet ---------- */
+    function openSheet() {
+      DOM.sheetBackdrop.classList.add('open');
+      DOM.sheetBackdrop.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeSheet() {
+      DOM.sheetBackdrop.classList.remove('open');
+      DOM.sheetBackdrop.setAttribute('aria-hidden', 'true');
     }
 
     /* ---------- PWA install + SW ---------- */
     function setupInstallPrompt() {
-      window.addEventListener("beforeinstallprompt", (event) => {
+      window.addEventListener('beforeinstallprompt', (event) => {
         event.preventDefault();
         APP.deferredInstallPrompt = event;
         DOM.btnInstall.hidden = false;
       });
 
-      DOM.btnInstall.addEventListener("click", async () => {
+      DOM.btnInstall.addEventListener('click', async () => {
         if (!APP.deferredInstallPrompt) return;
         APP.deferredInstallPrompt.prompt();
         APP.deferredInstallPrompt = null;
         DOM.btnInstall.hidden = true;
       });
 
-      window.addEventListener("appinstalled", () => {
+      window.addEventListener('appinstalled', () => {
         DOM.btnInstall.hidden = true;
       });
     }
 
     function registerServiceWorker() {
-      if (!("serviceWorker" in navigator)) return;
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js").catch((error) => {
-          console.warn("Service worker registration failed:", error);
+      if (!('serviceWorker' in navigator)) return;
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch((error) => {
+          console.warn('Service worker registration failed:', error);
         });
       });
     }
 
     /* ---------- events ---------- */
     function bindEvents() {
-      DOM.langEs.addEventListener("click", () => setLanguage("es"));
-      DOM.langEn.addEventListener("click", () => setLanguage("en"));
+      // language
+      DOM.langEs.addEventListener('click', () => setLanguage('es'));
+      DOM.langEn.addEventListener('click', () => setLanguage('en'));
 
-      DOM.btnKinetics.addEventListener("click", renderKinetics);
-      DOM.btnMetabolics.addEventListener("click", renderMetabolics);
-      DOM.btnFeed.addEventListener("click", renderFeed);
+      // tabs
+      DOM.tabs.forEach((b) => b.addEventListener('click', () => setActiveTab(b.dataset.tab)));
+      DOM.tiles.forEach((tile) => tile.addEventListener('click', () => setActiveTab(tile.dataset.go)));
 
-      DOM.btnClearAll.addEventListener("click", clearAll);
+      // calculators
+      DOM.btnKinetics.addEventListener('click', renderKinetics);
+      DOM.btnMetabolics.addEventListener('click', renderMetabolics);
+      DOM.btnFeed.addEventListener('click', renderFeed);
 
-      // Enter key triggers the action of the card
-      document.querySelectorAll("input, select").forEach((el) => {
-        el.addEventListener("keydown", (event) => {
-          if (event.key !== "Enter") return;
+      // feed helpers
+      DOM.btnFeedDefaults.addEventListener('click', () => {
+        applyFeedDefaults();
+        // keep current values untouched
+      });
+
+      DOM.btnFeedSync.addEventListener('click', () => {
+        syncFeedCurrentFromMetabolics();
+      });
+
+      // clear
+      DOM.btnClearAll.addEventListener('click', clearAll);
+
+      // info
+      DOM.btnInfo.addEventListener('click', openSheet);
+      DOM.btnCloseSheet.addEventListener('click', closeSheet);
+      DOM.sheetBackdrop.addEventListener('click', (e) => {
+        if (e.target === DOM.sheetBackdrop) closeSheet();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && DOM.sheetBackdrop.classList.contains('open')) closeSheet();
+      });
+
+      // Enter key triggers the action for the active panel
+      document.querySelectorAll('input, select').forEach((el) => {
+        el.addEventListener('keydown', (event) => {
+          if (event.key !== 'Enter') return;
           event.preventDefault();
 
-          const card = el.closest(".card");
-          if (!card) return;
+          const panel = el.closest('.panel');
+          if (!panel) return;
 
-          if (card.id === "card-kinetics") renderKinetics();
-          else if (card.id === "card-metabolics") renderMetabolics();
-          else if (card.id === "card-feed") renderFeed();
+          if (panel.id === 'panel-kin') renderKinetics();
+          else if (panel.id === 'panel-met') renderMetabolics();
+          else if (panel.id === 'panel-feed') renderFeed();
         });
 
         // soft reset invalid state while typing
-        el.addEventListener("input", () => {
-          const card = el.closest(".card");
-          if (card) setCardValidity(card, true);
-        });
-
-        el.addEventListener("change", () => {
-          const card = el.closest(".card");
+        el.addEventListener('input', () => {
+          const card = el.closest('.card');
           if (card) setCardValidity(card, true);
         });
       });
+
+      // Optional: auto-refresh results if already visible (feels more "app-like")
+      const debounce = (fn, ms = 150) => {
+        let t;
+        return (...args) => {
+          clearTimeout(t);
+          t = setTimeout(() => fn(...args), ms);
+        };
+      };
+
+      const autoKin = debounce(() => {
+        if (DOM.resKin.classList.contains('visible')) renderKinetics();
+        if (DOM.resMet.classList.contains('visible')) renderMetabolics();
+      }, 180);
+      const autoMet = debounce(() => { if (DOM.resMet.classList.contains('visible')) renderMetabolics(); }, 180);
+      const autoFeed = debounce(() => { if (DOM.resFeed.classList.contains('visible')) renderFeed(); }, 180);
+
+      // Kinetics inputs
+      [DOM.dtHours, DOM.dtUnit, DOM.x0, DOM.x1].forEach((el) => el.addEventListener('input', autoKin));
+      // Metabolics inputs
+      [DOM.doQglc, DOM.doQgln, DOM.glc0, DOM.glc1m, DOM.uGlc, DOM.gln0, DOM.gln1m, DOM.uGln].forEach((el) => el && el.addEventListener('input', autoMet));
+      // Feed inputs
+      [DOM.doFeedGlc, DOM.doFeedGln, DOM.curGlc, DOM.curGln, DOM.sGlc, DOM.uSGlc, DOM.sGln, DOM.uSGln, DOM.vCult, DOM.tGlc, DOM.tGln, DOM.feedSafety].forEach((el) => el && el.addEventListener('input', autoFeed));
     }
 
     function init() {
       loadSavedLanguage();
+      loadSavedTab();
       applyTranslations(APP.lang);
       bindEvents();
       setupInstallPrompt();
       registerServiceWorker();
 
-      // Start clean (no “looks used” results)
+      // Start clean
       clearAll();
+      setActiveTab(APP.activeTab);
     }
 
     init();
