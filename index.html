@@ -240,6 +240,16 @@
       flex-shrink: 0;
     }
 
+    @media (max-width: 500px) {
+      .app-subtitle { display: none; }
+      .app-title { font-size: 1.02rem; }
+      .app-icon { width: 32px; height: 32px; }
+      .brand { gap: 8px; }
+      .actions { gap: 4px; }
+      .actions .btn span { display: none; }
+      .seg button { padding: 6px 9px; }
+    }
+
     /* ── Buttons ─────────────────────────────── */
     .btn {
       border: 1px solid var(--glass-border);
