@@ -7,7 +7,7 @@
    - Stale-while-revalidate for same-origin assets
    ========================================== */
 
-const CACHE_NAME = "pulsegrowth-v1";
+const CACHE_NAME = "pulsegrowth-v2";
 
 const APP_SHELL = [
   "./",
@@ -17,7 +17,9 @@ const APP_SHELL = [
   "./icon-512.png",
   "./icon-maskable-192.png",
   "./icon-maskable-512.png",
-  "./apple-touch-icon-180.png"
+  "./src/css/app.css",
+  "./src/js/i18n.js",
+  "./src/js/app.js"
 ];
 
 /**

@@ -136,7 +136,13 @@ PulseGrowth/
 ├── icon-192.png
 ├── icon-512.png
 ├── icon-maskable-192.png
-└── icon-maskable-512.png
+├── icon-maskable-512.png
+└── src/
+    ├── css/
+    │   └── app.css         ← all styles
+    └── js/
+        ├── i18n.js         ← translation strings (ES / EN)
+        └── app.js          ← all application logic
 ```
 
 ---
