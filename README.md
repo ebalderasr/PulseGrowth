@@ -1,272 +1,167 @@
-# 🛰️ PulseGrowth | Host Cell Lab Suite
-> **Growth kinetics and process timing. Fast, clear, and lab-ready.**
+<div align="center">
 
-PulseGrowth is a lightweight web app for analyzing **cell growth kinetics** and estimating **process timing** in mammalian cell culture workflows.  
-It is part of **Host Cell**, a growing suite of practical laboratory and bioprocess tools built by **Emiliano Balderas** (IBt-UNAM).
+# PulseGrowth
 
-<p align="center">
-  <img src="icon-512.png" width="180" alt="PulseGrowth Logo">
-</p>
+### Growth kinetics and metabolic rate estimation for mammalian cell culture
 
-<p align="center">
-  <a href="https://ebalderasr.github.io/PulseGrowth/">
-    <img src="https://img.shields.io/badge/🚀_Launch_Live_App-PulseGrowth-007bff?style=for-the-badge&labelColor=000000" alt="Launch PulseGrowth App">
-  </a>
-</p>
+<a href="https://ebalderasr.github.io/PulseGrowth/">
+  <img src="icon-512.png" alt="PulseGrowth" width="120">
+</a>
 
-<p align="center">
-  <a href="https://github.com/ebalderasr/PulseGrowth">Repo</a> •
-  <a href="https://ebalderasr.github.io/PulseGrowth/">Live App</a>
-</p>
+<br>
+
+**[→ Open the live app](https://ebalderasr.github.io/PulseGrowth/)**
+
+<br>
+
+[![Stack](https://img.shields.io/badge/Stack-HTML_·_CSS_·_JavaScript-4A90D9?style=for-the-badge)]()
+[![Focus](https://img.shields.io/badge/Focus-Growth_Kinetics_·_CHO-34C759?style=for-the-badge)]()
+[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](./LICENSE)
+[![Part of](https://img.shields.io/badge/Part_of-Host_Cell_Lab_Suite-5856D6?style=for-the-badge)](https://github.com/ebalderasr)
+
+</div>
 
 ---
 
 ## What is PulseGrowth?
 
-**PulseGrowth** helps convert routine sampling data into actionable bioprocess metrics for mammalian cell culture.
+PulseGrowth is a **browser-based kinetics calculator** for mammalian cell culture. It converts routine two-point sampling data into the growth and metabolic metrics needed for passaging decisions, clone comparisons, and feeding corrections.
 
-The app is organized into three practical modules:
+The app is organized into three modules: growth kinetics (μ, doubling time, IVCD), specific metabolite consumption rates (qGlc, qGln), and a simple feed correction estimator. All three are designed for quick bench-side use during culture operations.
 
-- **Bio-Kinetics**: calculates growth metrics from two sampling points
-- **Metabolics (q)**: estimates **qGlc** and **qGln** normalized by IVCD
-- **Feed Control**: estimates simple feed additions to restore target concentrations
-
-It is designed for quick bench-side calculations, passaging decisions, and culture monitoring.
+No installation. No server. Runs entirely in the browser.
 
 ---
 
-## 🧬 Scientific Fundamentals
+## Why it matters
 
-PulseGrowth uses an **exponential growth model** between two sampling points:
+Routine culture monitoring generates two data points at every sampling: a cell count and a set of metabolite concentrations. Extracting actionable metrics from those points — growth rate, doubling time, specific consumption rates — requires several non-trivial calculations that are error-prone to do by hand. Without a dedicated tool:
 
-$$X = X_0 \cdot e^{\mu t}$$
+- μ and doubling time must be derived manually from a logarithmic expression
+- Specific rates require IVCD normalization, which is rarely computed at the bench
+- Unit conversions (g/L → mM) are applied inconsistently, making q values incomparable across runs
+- Feed correction volumes must be calculated separately from a different formula
 
-### Variable definitions
-- **X0**: initial viable cell density (typically in **×10⁶ cell/mL**)
-- **X1**: final viable cell density (typically in **×10⁶ cell/mL**)
-- **Δt**: elapsed time between measurements
-- **μ**: specific growth rate
-
-### Core growth calculations
-PulseGrowth calculates:
-
-$$\mu = \frac{\ln(X_1/X_0)}{\Delta t}$$
-
-$$t_d = \frac{\ln(2)}{\mu}$$
-
-$$\text{Expansion factor} = \frac{X_1}{X_0}$$
-
-### IVCD (exponential approximation)
-To normalize metabolite consumption rates, PulseGrowth estimates **Integrated Viable Cell Density (IVCD)** as:
-
-$$IVCD = \left(\frac{X_1 - X_0}{\ln(X_1/X_0)}\right)\Delta t$$
-
-This is useful for obtaining more comparable **specific rates (q)** than using only initial or final cell density.
+PulseGrowth covers all three steps in one interface, with consistent unit handling throughout.
 
 ---
 
-## ✅ Calculation Logic (How PulseGrowth computes results)
+## How it works
 
-This section explains **exactly how the app performs the calculations**.
+### Module 1 — Bio-Kinetics
 
-### 1) Bio-Kinetics module
-Given **X0**, **X1**, and **Δt**:
-1. Convert **Δt** to a common internal time basis (hours, if needed)
-2. Compute **μ** using the exponential growth equation
-3. Compute **doubling time** from μ
-4. Compute **expansion factor = X1/X0**
-5. Compute **IVCD** for downstream q calculations
+Enter X₀, X₁, and Δt (in hours or days). PulseGrowth returns:
 
-### 2) Metabolics module (qGlc / qGln)
-PulseGrowth estimates specific metabolite rates using concentration change normalized by IVCD.
+- Specific growth rate (μ)
+- Doubling time (t_d)
+- Expansion factor (X₁ / X₀)
+- IVCD (exponential approximation, for downstream q calculations)
 
-#### Step A: Normalize concentration units
-If the user enters metabolite concentrations in **g/L**, the app converts them internally to **mM** using molecular weight (MW):
+### Module 2 — Metabolics (q)
 
-$$mM = \frac{g/L}{MW\ (g/mol)} \times 1000$$
+Enter glucose and/or glutamine concentrations as C₀ → C₁, selecting g/L or mM. The app converts g/L to mM internally using fixed molecular weights (Glc = 180.156 g/mol, Gln = 146.145 g/mol), then normalizes the concentration change by IVCD:
 
-Default MW values used:
-- **Glucose (Glc)** = **180.156 g/mol**
-- **Glutamine (Gln)** = **146.145 g/mol**
+- qGlc — specific glucose consumption (pmol/cell/day)
+- qGln — specific glutamine consumption (pmol/cell/day)
 
-If the user enters values directly in **mM**, no conversion is needed.
+A positive q means net consumption (C₀ > C₁). Entering values in g/L or mM produces equivalent results because units are normalized before computing.
 
-#### Step B: Compute concentration change
-For each metabolite:
+### Module 3 — Feed Control
 
-$$\Delta C = C_0 - C_1$$
-
-Where:
-- **C0** = initial concentration
-- **C1** = final concentration
-
-Positive **ΔC** means net consumption.
-
-#### Step C: Compute specific rate (q)
-PulseGrowth reports q values consistently in **pmol/cell/day**:
-
-$$q = \left(\frac{\Delta C}{IVCD}\right)\times 24$$
-
-Where:
-- **ΔC** is in **mM**
-- **IVCD** is in **(10^6\ cell\cdot h)/mL**
-- The factor **24** converts from per-hour to per-day basis
-
-### 3) Feed Control module (simple correction estimate)
-PulseGrowth estimates the feed volume required to adjust a metabolite concentration from current to target level using a single-addition correction formula.
-
-For a feed stock concentration **Cstock**, current concentration **Ccurrent**, target concentration **Ctarget**, and culture volume **Vculture**:
-
-$$V_{feed} = \frac{(C_{target}-C_{current})V_{culture}}{C_{stock}-C_{target}}$$
-
-This is a **simple algebraic planner** for practical lab use, not a full dynamic feeding model.
+Enter culture volume, stock concentration, current concentration, and target concentration. PulseGrowth returns the feed volume required to restore the target level in a single addition. Intended as a quick operational estimate, not a full dynamic feeding model.
 
 ---
 
-## ✅ Unit Logic (Important)
+## Methods
 
-PulseGrowth uses a unit strategy designed for **consistency and comparability**.
+### Exponential growth model
 
-### Cell density inputs
-- Expected in **×10⁶ cell/mL**
+$$\mu = \frac{\ln(X_1 / X_0)}{\Delta t} \qquad t_d = \frac{\ln 2}{\mu} \qquad \text{Expansion} = \frac{X_1}{X_0}$$
 
-### Time inputs
-- **hours** or **days**
-- Internally normalized for growth-rate calculations
+### IVCD (exponential approximation between two points)
 
-### Metabolite concentration inputs
-- **g/L** or **mM** (for Glc / Gln)
+$$IVCD = \left(\frac{X_1 - X_0}{\ln(X_1/X_0)}\right) \Delta t$$
 
-### q outputs
-- Primary output: **pmol/cell/day**
-- Optional display: **pg/cell/day** (mass-equivalent reference)
+### Specific metabolite consumption rate
 
-### Correct use rule
-PulseGrowth ensures q outputs are comparable by converting **g/L → mM** internally before calculation.
+$$q = \frac{\Delta C}{IVCD} \times 24$$
 
-✅ This means:
-- entering glucose as **6 → 4 g/L**
-- or entering equivalent values in **mM**
+where ΔC = C₀ − C₁ in mM, IVCD in 10⁶ cells·h/mL, and the factor 24 converts from per-hour to per-day.
 
-...will produce comparable **qGlc** values (aside from rounding), because the app normalizes units before computing q.
+### Feed correction (single addition)
+
+$$V_{feed} = \frac{(C_{target} - C_{current}) \times V_{culture}}{C_{stock} - C_{target}}$$
 
 ---
 
-## ⚡ Features
+## Features
 
-- **Growth Kinetics Solver:** Calculates **μ**, **doubling time**, and **expansion factor**
-- **IVCD-Based q Estimation:** qGlc / qGln normalized using exponential IVCD approximation
-- **Unit-Aware Metabolite Inputs:** Accepts **g/L** or **mM** and converts internally
-- **Simple Feed Planner:** Quick feed-volume estimates for glucose and glutamine correction
-- **Time Input Flexibility:** Manual Δt or start/end datetime input
-- **Mobile-First UI:** High-contrast, telemetry-inspired interface for real lab use
-- **PWA Ready:** Installable on Android/iOS and usable offline after first load
-- **Host Cell Design System:** Visual consistency with other tools in the suite
-
----
-
-## 🔬 Typical Use Cases
-
-PulseGrowth is useful for:
-- estimating whether a culture is still in **exponential growth**
-- comparing growth performance across clones or conditions
-- calculating **doubling time** for passaging planning
-- estimating **qGlc** and **qGln** from routine sampling data
-- planning simple corrective feeds for glucose/glutamine
-- reducing manual calculator/transcription errors during culture operations
+| | |
+|---|---|
+| **Growth kinetics** | Computes μ, doubling time, expansion factor, and IVCD from two sampling points |
+| **IVCD-normalized q** | qGlc and qGln estimated using exponential IVCD for consistent inter-run comparison |
+| **Unit-aware metabolite inputs** | Accepts g/L or mM; converts internally before computing q |
+| **Feed correction estimator** | Single-addition feed volume for glucose and glutamine correction |
+| **Flexible time input** | Manual Δt or start/end datetime |
+| **Offline-first PWA** | Service Worker caches all assets; works without internet after first load |
+| **Bilingual UI** | Full Spanish / English interface |
+| **No installation** | Opens instantly in any modern browser; installable on Android, iOS, and desktop |
 
 ---
 
-## 🚀 How to Use
+## Tech stack
 
-### Bio-Kinetics
-1. Enter **X0**, **X1**, and **Δt**
-2. Select time unit (**h** or **day**)
-3. Click **Analyze kinetics**
-4. Review **μ**, **t_d**, **expansion factor**, and **IVCD**
+**Frontend**
 
-### Metabolics (q)
-1. Enter Glc and/or Gln concentrations as **C0 → C1**
-2. Select units (**g/L** or **mM**)
-3. Click **Calculate q**
-4. Review **qGlc** and **qGln** in **pmol/cell/day**
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
 
-### Feed Control
-1. Enter culture volume
-2. Enter stock concentrations and target concentrations
-3. Click **Calculate feed plan**
-4. Review estimated feed volumes
+**Deployment**
+
+![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-222222?style=flat-square&logo=github&logoColor=white)
+![PWA](https://img.shields.io/badge/PWA-5A0FC8?style=flat-square&logo=pwa&logoColor=white)
+
+Fully static — no backend, no framework, no build step.
 
 ---
 
-## 📱 Installation (PWA)
+## Project structure
 
-PulseGrowth can be installed as a Progressive Web App (PWA) for faster access and offline use.
-
-### Android / Desktop (Chrome, Edge)
-- Open the live app
-- Tap/click **Install App** (if shown)
-- Or use the browser install prompt/menu
-
-### iPhone / iPad (Safari)
-- Open the live app
-- Tap **Share**
-- Select **Add to Home Screen**
-
-Once installed, the app can work offline after the required files are cached.
+```
+PulseGrowth/
+├── index.html              ← markup only
+├── manifest.json           ← PWA manifest
+├── sw.js                   ← Service Worker (cache-first, offline support)
+├── icon-192.png
+├── icon-512.png
+├── icon-maskable-192.png
+└── icon-maskable-512.png
+```
 
 ---
 
-## ❓ FAQ
+## Author
 
-**Q: Why does PulseGrowth convert g/L to mM for q calculations?**  
-**A:** Because q should be comparable across inputs. Concentration changes in **g/L** and **mM** are not directly equivalent without using molecular weight (MW). PulseGrowth converts to **mM** internally before computing q.
+**Emiliano Balderas Ramírez**
+Bioengineer · PhD Candidate in Biochemical Sciences
+Instituto de Biotecnología (IBt), UNAM
 
-**Q: What does a positive q mean?**  
-**A:** By convention in PulseGrowth, **q > 0** means **net consumption** (C0 > C1). Negative q means the metabolite increased over time (net accumulation/production).
-
-**Q: Is IVCD exact?**  
-**A:** No. The app uses an **exponential approximation** of IVCD between two sampling points. It is practical and useful for routine comparisons, but still depends on the underlying growth behavior and data quality.
-
-**Q: Does this replace process models or SOPs?**  
-**A:** No. PulseGrowth is a **calculation aid** for rapid workflow support. Always validate decisions against SOPs, process knowledge, and experimental context.
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-emilianobalderas-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/emilianobalderas/)
+[![Email](https://img.shields.io/badge/Email-ebalderas%40live.com.mx-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:ebalderas@live.com.mx)
 
 ---
 
-## ⚠️ Notes and Limitations
+## Related
 
-* PulseGrowth is a **calculation aid**, not a substitute for SOPs or experimental judgment.
-* Exponential assumptions may not hold if the culture is in lag/stationary/decline phase.
-* IVCD is an approximation based on two sampling points.
-* Feed calculations are simplified and intended for quick operational estimates.
-* Always verify:
-  * units and concentration basis
-  * sampling times
-  * viable cell count quality / counting consistency
-  * stock solution identity and concentration
-* For critical workflows, follow institutional protocols and lab-specific validation practices.
+[**CellSplit**](https://github.com/ebalderasr/CellSplit) — Neubauer cell counting and passage planning for CHO cultures.
+
+[**Kinetic Drive**](https://github.com/ebalderasr/Kinetic-Drive) — interactive kinetic analysis for mammalian cell culture data.
+
+[**Clonalyzer 2**](https://github.com/ebalderasr/Clonalyzer-2) — fed-batch kinetics analysis with clone comparisons and publication-ready plots.
+
+[**CellBlock**](https://github.com/ebalderasr/CellBlock) — shared biosafety cabinet scheduling for cell culture research groups.
 
 ---
 
-## 👨‍🔬 Author
-
-**Emiliano Balderas**  
-Biotechnology Engineer | PhD Student in Biochemistry  
-*Instituto de Biotecnología (IBt) - UNAM*
-
----
-
-## 🧩 About Host Cell
-
-**Host Cell** is a growing suite of practical lab and bioprocess tools focused on:
-
-* clarity
-* speed
-* reproducibility
-* real-world usability at the bench
-
-PulseGrowth is one module in that ecosystem.
-
----
-
-**Host Cell Lab Suite** – *Practical tools for high-performance biotechnology.*
+<div align="center"><i>PulseGrowth — two sampling points, full kinetic picture.</i></div>
