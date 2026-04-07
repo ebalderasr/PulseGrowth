@@ -28,50 +28,38 @@
 
   <!-- NAV -->
   <header class="nav" aria-label="PulseGrowth navigation">
-    <div class="nav-row">
+    <!-- Row 1: Brand + Host Cell -->
+    <div class="nav-row nav-row-brand">
       <div class="brand">
         <img src="./icon-192.png" alt="PulseGrowth" class="app-icon" />
         <div class="brand-text">
           <h1 class="app-title">PulseGrowth</h1>
-          <div class="app-subtitle" data-i18n="subtitle">Host Cell Lab Suite · Practical tools for high-performance biotechnology.</div>
+          <div class="app-subtitle">Two sampling points, full kinetic picture</div>
         </div>
       </div>
+      <a class="hc-suite-pill" href="https://www.hostcell.app" target="_blank" rel="noopener noreferrer" aria-label="Host Cell Lab Suite">
+        <span class="hc-suite-label">Host Cell</span>
+      </a>
+    </div>
 
-      <div class="actions">
-        <!-- Host Cell Suite -->
-        <a class="hc-suite-pill" href="https://www.hostcell.app" target="_blank" rel="noopener noreferrer" aria-label="Host Cell Lab Suite">
-          <span class="hc-suite-label">Host Cell</span>
-        </a>
-
-        <!-- Language seg -->
-        <div class="seg" aria-label="Language selector">
-          <button id="lang-es" class="active" type="button" aria-selected="true">ES</button>
-          <button id="lang-en" type="button" aria-selected="false">EN</button>
-        </div>
-
-        <!-- Info -->
-        <button class="btn btn-ghost" id="btn-info" type="button" aria-label="Info">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 10v7M12 7h.01" stroke-width="2.2"/>
-          </svg>
-        </button>
-
-        <!-- Clear -->
-        <button class="btn btn-danger" id="btn-clear-all" type="button" aria-label="Clear all">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M3 6h18M8 6V4h8v2M7 6l1 15h8l1-15"/>
-          </svg>
-        </button>
-
-        <!-- Install (PWA) -->
-        <button class="btn btn-install" id="install-btn" type="button" hidden aria-label="Install app">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 3v10M8 11l4 4 4-4M4 20h16"/>
-          </svg>
-          <span data-i18n="btnInstall">Instalar</span>
-        </button>
+    <!-- Row 2: Tools -->
+    <div class="nav-row nav-row-tools">
+      <div class="seg" aria-label="Language selector">
+        <button id="lang-es" type="button" aria-selected="true">ES</button>
+        <button id="lang-en" type="button" aria-selected="false">EN</button>
       </div>
+      <button class="btn-info-badge" id="btn-info" type="button" aria-label="Info">!</button>
+      <button class="btn btn-danger" id="btn-clear-all" type="button" aria-label="Clear all">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 6h18M8 6V4h8v2M7 6l1 15h8l1-15"/>
+        </svg>
+      </button>
+      <button class="btn btn-install" id="install-btn" type="button" hidden aria-label="Install app">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3v10M8 11l4 4 4-4M4 20h16"/>
+        </svg>
+        <span data-i18n="btnInstall">Instalar</span>
+      </button>
     </div>
   </header>
 
