@@ -857,16 +857,125 @@
       color: var(--label);
     }
 
-    /* ── Footer ──────────────────────────────── */
-    footer {
-      margin-top: 20px;
-      color: var(--tertiary);
-      font-size: 0.83rem;
-      font-weight: 500;
-      text-align: center;
-      padding-bottom: 8px;
+    /* ── HostCell Suite Pill (header) ─────────── */
+    .hc-suite-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.42rem 0.78rem;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #F5F9FF 0%, #E8F0FE 100%);
+      border: 1px solid #C5D9FB;
+      box-shadow: 0 1px 3px rgba(60,64,67,0.12);
+      text-decoration: none;
+      transition: transform 110ms ease, box-shadow 130ms ease, background 130ms ease;
+      flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
-    footer strong { color: var(--secondary); }
+    .hc-suite-pill:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(60,64,67,0.15);
+      background: linear-gradient(135deg, #EEF5FF 0%, #DCEBFF 100%);
+    }
+    .hc-suite-pill:active { transform: scale(0.95); opacity: 0.88; }
+    .hc-suite-label {
+      font-size: 0.70rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: #4285F4;
+      white-space: nowrap;
+      text-transform: uppercase;
+      font-family: inherit;
+    }
+    @media (prefers-color-scheme: dark) {
+      .hc-suite-pill {
+        background: linear-gradient(135deg, rgba(66,133,244,0.14) 0%, rgba(66,133,244,0.22) 100%);
+        border-color: rgba(66,133,244,0.36);
+      }
+      .hc-suite-pill:hover {
+        background: linear-gradient(135deg, rgba(66,133,244,0.20) 0%, rgba(66,133,244,0.30) 100%);
+      }
+      .hc-suite-label { color: #7BAAF7; }
+    }
+    @media (max-width: 500px) {
+      .hc-suite-pill { padding: 0.36rem 0.55rem; }
+      .hc-suite-label { font-size: 0.63rem; letter-spacing: 0.02em; }
+    }
+
+    /* ── HostCell Footer ─────────────────────── */
+    footer.hc-footer {
+      margin-top: 24px;
+      padding: 14px 16px;
+      padding-bottom: calc(14px + var(--safe-bot));
+      border-top: 1px solid var(--separator);
+      background: var(--nav-bg);
+      backdrop-filter: var(--blur-sm);
+      -webkit-backdrop-filter: var(--blur-sm);
+    }
+    .hc-footer-inner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      max-width: var(--maxw);
+      margin: 0 auto;
+    }
+    .hc-footer-suite {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+    }
+    .hc-footer-name {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #4285F4;
+      white-space: nowrap;
+    }
+    .hc-footer-slogan {
+      font-size: 0.66rem;
+      color: var(--secondary);
+      white-space: nowrap;
+      font-style: italic;
+    }
+    .hc-footer-author {
+      font-size: 0.77rem;
+      color: var(--secondary);
+      white-space: nowrap;
+      margin-left: auto;
+    }
+    .hc-footer-github {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.40rem 0.88rem;
+      border-radius: 999px;
+      background: #1e2330;
+      color: #FFFFFF;
+      font-size: 0.77rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 130ms ease, transform 110ms ease, box-shadow 130ms ease;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.20);
+      flex-shrink: 0;
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .hc-footer-github:hover {
+      background: #2d3348;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 9px rgba(0,0,0,0.25);
+    }
+    .hc-footer-github:active { transform: scale(0.96); opacity: 0.88; }
+    .hc-footer-github svg { flex-shrink: 0; }
+
+    @media (max-width: 500px) {
+      .hc-footer-inner { gap: 7px; }
+      .hc-footer-author { margin-left: 0; }
+      .hc-footer-github { margin-left: auto; }
+    }
 
     @media (prefers-reduced-motion: reduce) {
       * { transition: none !important; }
